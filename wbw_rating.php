@@ -6,16 +6,9 @@ $is_debug = ($_REQUEST['debug']=="on" || $_REQUEST['debug']=="true" );
 include("shared_inc/wiki_functions.inc.php");
 $server = "$lang.$project.org";
 $article = "Wikipedia:Wartungsbausteinwettbewerb/".name_in_url($_REQUEST['edition']);
-$wbw_page = "http://".$server."/w/index.php?title=".$article;
-$purge_page = "http://".$server."/w/api.php?action=purge&titles=".$article;
+$wbw_page = "https://".$server."/w/index.php?title=".$article;
 
-$purge = post_request($server, $purge_page, "", "");
-
-if($is_debug)
-{
-	echo "Purging returned $purge";
-}
-
+purge($server, $article, $is_debug);
 
 $points_per_team = rate_teams($server, $wbw_page);
 
@@ -178,7 +171,7 @@ function update_paragraphs($paragraphs, $points_per_team)
 	
 function print_form($wbw_page, $paragraphs, $article)
 {
-	echo '<form method="post" action="' . str_replace('http', 'https', $wbw_page) . '&action=submit">';
+	echo '<form method="post" action="' . $wbw_page . '&action=submit">';
 	set_up_media_wiki_input_fields("Zwischenstände aktualisiert", "Aktualisieren", $article);
 	
 	if(!$is_debug) $style="style=\"display: none;\"";
