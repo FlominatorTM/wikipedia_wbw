@@ -365,8 +365,8 @@ function ask_to_cut_org($oldid, $diff)
 		. "<label for=\"percent_quality\">Korrekturfaktor (in Prozent)&nbsp;</label>" 
 		. "<input name=\"percent_quality\" id=\"percent_quality\" value=\"100\"><br>" 
 		. 'Tabellensyntax in obigen Textfeldern <a href="#" onclick="javascript:RemoveTableAttributesBoth();"> entfernen</a><br />'  
-		. "<label for=\"comment\">Anmerkung&nbsp;</label>" .	 array_drop ("comment", $comment_choices, "", "", "SetComment(this.options[this.selectedIndex].text)", $comment_choices[0]) ."<br>"
-		. "<input name=\"commentText\"  id=\"commentText\" readonly size=\"100\"><br>" 
+		. "<label for=\"comment\">Anmerkung&nbsp;</label>" .	 array_drop ("comment", $comment_choices, "", "", "SetComment(this.options[this.selectedIndex].text)", $comment_choices[1]) ."<br>"
+		. "<input name=\"commentText\"  id=\"commentText\" size=\"100\"><br>" 
 		. "<label for=\"rater\">Schiedsrichter&nbsp;</label><br>"	
 		. "<input name=\"rater\"  id=\"rater\" value=\"$rater\"><br>"
 		."<input type=\"submit\" value=\"Auswerten\"></form>";
