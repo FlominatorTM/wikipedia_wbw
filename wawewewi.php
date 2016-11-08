@@ -203,8 +203,8 @@ function get_additional_points()
 {
 	$add = 0;
 	$add+= getint('num_sources') * 0.5;
-	$add+=degressive_rating(getint('num_coord'));
-	$add+=degressive_rating(getint('num_dw'));
+	$add+=coord_rating(getint('num_coord'));
+	$add+=dw_rating(getint('num_dw'));
 	$add+=image_rating(getint('num_upload'));
 	return $add;
 }
@@ -245,7 +245,7 @@ function image_rating($num_cases)
 }
 
 
-function degressive_rating($num_cases)
+function coord_rating($num_cases)
 {
 	$first_improvement = 0.4;
 	$every_other_improvement = 0.15;
@@ -272,6 +272,32 @@ function degressive_rating($num_cases)
 	return $points_return;
 }
 
+function dw_rating($num_cases)
+{
+	$pointsFirstOne = 0.5;
+	$pointsFirstTen = 0.25;
+	$pointsStartingEleven = 0.125;
+	
+	$points_return = 0.0;
+	
+	if($num_cases == 0)
+	{
+		$points_return = 0;
+	}
+	else if($num_cases == 1)
+	{
+		$points_return = $pointsFirstOne;
+	}
+	else if($num_cases <= 10)
+	{
+		$points_return = ($num_cases - 1) * $pointsFirstTen + $pointsFirstOne; 
+	}
+	else
+	{
+		$points_return = ($num_cases - 10) * $pointsStartingEleven + $pointsFirstTen * 9 + $pointsFirstOne;
+	}
+	return $points_return;
+}
 
 function get_similarity($src_old, $src_new)
 {
