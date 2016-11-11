@@ -167,7 +167,7 @@ else
 		
 	echo "Ähnlichkeit ohne Groß- und Kleinschreibung: " . $similarity  ."&nbsp;%\n<br>";
 	echo "Differenz: " . $len_diff . " Bytes<br>";
-	echo "zu erwartende Punktzahl: ". round($expectedPointResult,1 ); 
+	echo "zu erwartende Punktzahl: ". round($expectedPointResult,2); 
 	
 	if($comments !="")
 	{
