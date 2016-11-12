@@ -389,7 +389,9 @@ function ask_to_cut_org($oldid, $diff)
 		. "<label for=\"num_coord\">Anzahl hinzugefügter Koordinaten&nbsp;</label>" 
 		. "<input name=\"num_coord\" id=\"num_coord\"><br>" 
 		. "<label for=\"percent_quality\">Korrekturfaktor (in Prozent)&nbsp;</label>" 
-		. "<input name=\"percent_quality\" id=\"percent_quality\" value=\"100\"><br>" 
+		. "<input name=\"percent_quality\" id=\"percent_quality\" value=\"100\">" 
+	. "<button name=\"alt5\" id=\"alt5\" type=\"button\" onclick=\"javascript:document.getElementById('percent_quality').value='120';document.getElementById('commentText').value='alt5';\" text=\"alt5\">alt5</button>" 
+		. "<button name=\"alt10\" id=\"alt10\" type=\"button\" onclick=\"javascript:document.getElementById('percent_quality').value='130';document.getElementById('commentText').value='alt10';\">alt10</button><br>" 		
 		. 'Tabellensyntax in obigen Textfeldern <a href="#" onclick="javascript:RemoveTableAttributesBoth();"> entfernen</a><br />'  
 		. "<label for=\"comment\">Anmerkung&nbsp;</label>" .	 array_drop ("comment", $comment_choices, "", "", "SetComment(this.options[this.selectedIndex].text)", $comment_choices[1]) ."<br>"
 		. "<input name=\"commentText\"  id=\"commentText\" size=\"100\"><br>" 
@@ -398,6 +400,7 @@ function ask_to_cut_org($oldid, $diff)
 		."<input type=\"submit\" value=\"Auswerten\"></form>";
 	}
 }
+
 
 function hex_chars($data) {
     $mb_chars = '';
