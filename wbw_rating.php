@@ -137,7 +137,7 @@ function extract_data_for_one_article($list_of_article_points, $i)
 	global $is_debug, $biggestImprovementArticle, $biggestImprovementPoints, $fixedTemplates;
 	$fPoints = 0;
 	$one_rated_article = $list_of_article_points[$i];
-	echo "UU". $one_rated_article ."UU\"</a>";
+	echo "UU". $one_rated_article ."UU";
 	$indexFirstPipe = strpos($one_rated_article, "|");
 	if($indexFirstPipe > 0)
 	{
@@ -151,8 +151,34 @@ function extract_data_for_one_article($list_of_article_points, $i)
 			if($fPoints>0)
 			{
 				$templateName = substr($one_rated_article,0, $indexFirstPipe-1);
-				$fixedTemplates[$templateName] = $fixedTemplates[$templateName]+1;
+				
 				//echo "points: ". $fPoints;
+				
+				//find articles combined to one templates
+				if(stristr($one_rated_article, "}"))
+				{
+					$j = $i-1;
+					$goleft = true;
+					$numArticles = 0;
+					do
+					{
+						$titles = explode('title="', $list_of_article_points[$j]);
+						$numArticles += count($titles)-1;
+						$j--;
+						$goleft = strpos('|', $list_of_article_points[$j]) > 0;
+						//these are parts of articles with ( in name
+					}
+					while($goleft);
+					echo "mult=$numArticles";
+					$fixedTemplates[$templateName] +=$numArticles;
+					
+					echo "K-K" . strip_tags($list_of_article_points[$i-1]). "K+K";
+				}
+				else
+				{
+					$fixedTemplates[$templateName] = $fixedTemplates[$templateName]+1;
+				}
+				
 				
 				//get article name
 				$lenOfEnd = 2;
@@ -160,7 +186,7 @@ function extract_data_for_one_article($list_of_article_points, $i)
 				$indexEndArticleName = strpos($list_of_article_points[$i-1], "<", $indexBeginningArticleName+$lenOfEnd);
 				$article = substr($list_of_article_points[$i-1], $indexBeginningArticleName, $indexEndArticleName-$indexBeginningArticleName);
 				//echo "article:" . $article; 
-				
+	
 				if($fPoints>$biggestImprovementPoints)
 				{
 					//echo "new biggest improvement:".$article . " with $fPoints points";
