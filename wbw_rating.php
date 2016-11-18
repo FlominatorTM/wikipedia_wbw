@@ -19,7 +19,7 @@ sort_and_print_score_list($points_per_team);
 
 var_dump($fixedTemplates);
 print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints);
-print_form($wbw_page, update_paragraphs(get_source_code_paragraphs($server, $wbw_page), $points_per_team), $article);
+print_form($wbw_page, update_paragraphs(update_summary_paragraph(get_source_code_paragraphs($server, $wbw_page)), $points_per_team), $article);
 
 function print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints)
 {
@@ -202,10 +202,44 @@ function get_source_code_paragraphs($server, $wbw_page)
 	return $paragraphs;
 }
 
+function update_summary_paragraph($paragraphs)
+{
+	global $is_debug;
+	if($is_debug) echo "<h1>Para 0 before</h1>".htmlspecialchars($paragraphs[0])."<hr>";
+	$tableHeadLine ='Wettbewerbstabelle ==';
+	$commentEnd = "-->";
+	$endTableHeadLine = strpos($paragraphs[0], $tableHeadLine) + strlen($tableHeadLine);
+	$endComment =   strpos($paragraphs[0], $commentEnd) + strlen($commentEnd);
+	$endTableHeadLine = max($endTableHeadLine, $endComment);
+	echo "endTableHeadLine: $endTableHeadLine";
+	$tableTemplate = '{{Wikipedia:Wartungsbausteinwettbewerb/Vorlage Tabelle}}';
+	$beginningOfTableTemplate = strpos($paragraphs[0], $tableTemplate, $endTableHeadLine);
+	echo "beginningOfTableTemplate: $beginningOfTableTemplate";
+	$templatesTable = build_templates_table();
+	
+	$paragraphs[0] = substr($paragraphs[0], 0, $endTableHeadLine) . $templatesTable . substr($paragraphs[0], $beginningOfTableTemplate);
+	if($is_debug) echo "<h1>Para 0 after</h1>".htmlspecialchars($paragraphs[0])." <hr>";
+	return $paragraphs;
+}
+
+function build_templates_table()
+{
+	global $fixedTemplates;
+	$table = "\n" . '{| class="wikitable" width="100%" ' ."\n" .'|- class="hintergrundfarbe8"';
+	$icons = get_template_icons();
+	foreach(array_keys($fixedTemplates) as $templ)
+	{
+		$table.="\n! " . $fixedTemplates[$templ] . ' ' . $icons[$templ];
+	}
+	$table.="\n|}\n";
+	return $table;
+}
+
 function update_paragraphs($paragraphs, $points_per_team)
 {
 	global $is_debug;
-	for($iParagraph=0;$iParagraph<count($paragraphs );$iParagraph++)
+	$max = count($paragraphs );
+	for($iParagraph=1;$iParagraph<$max;$iParagraph++)
 	{
 		if($is_debug) echo "<h1>Para $iParagraph before</h1>".htmlspecialchars($paragraphs[$iParagraph])."<hr>";
 
@@ -335,4 +369,25 @@ function str_insert($insertstring, $intostring, $offset)
    return $whole;
 }
  
+ function get_template_icons()
+ {
+	 $icons['ü'] = '[[Datei:Qsicon Ueberarbeiten.svg|Überarbeiten|verweis=Kategorie:Wikipedia:Überarbeiten|15px]]';
+	 $icons['q'] = '[[Datei:Qsicon Quelle.svg|Belege fehlen|verweis=Kategorie:Wikipedia:Belege fehlen|15px]]';
+	 $icons['lü'] = '[[Datei:Qsicon Lücke.svg|Lückenhaft|verweis=Kategorie:Wikipedia:Lückenhaft|15px]]';
+	 $icons['pov'] = '[[Datei:Qsicon Achtung.svg|Neutralität|verweis=Kategorie:Wikipedia:Neutralität|15px]]';
+	 $icons['nl'] = '[[Datei:QSicon Formatierung.svg|NurListe|verweis=Kategorie:Wikipedia:Nur Liste|15px]]';
+	 $icons['uv'] = '[[Datei:Qsicon Unverstaendlich.svg|15x15px|link=Kategorie:Wikipedia:Unverständlich]]';
+	 
+	 $icons['ws'] = '[[Datei:Split-arrows.svg|Widerspruch|verweis=Kategorie:Wikipedia:Widerspruch|15px]]';
+	 $icons['inter'] = '[[Datei:German-Language-Flag.svg|Internationalisierung|verweis=Kategorie:Wikipedia:Internationalisierung|15px]]';
+	 $icons['qs'] = '[[Datei:Icon tools.svg|Qualitätssicherung|verweis=Kategorie:Wikipedia:Qualitätssicherung|15px]]';
+	 $icons['red'] = '[[Datei:Merge-arrows.svg|Redundanz|verweis=Kategorie:Wikipedia:Redundanz|15px]]';
+	 $icons['gq'] = '[[Datei:Meyerskonvlexikon.jpg|Meyers|verweis=Kategorie:Wikipedia:Meyers|15px]]';
+	 $icons['alt'] = '[[Datei:QSicon rot Uhr.svg|veraltet|verweis=Kategorie:Wikipedia:veraltet|15px]]';
+	 $icons['dw'] = '[[Datei:Qsicon Weblink red.svg|15x15px|link=Kategorie:Wikipedia:Defekte Weblinks|15px]]';
+	 $icons['geo'] = '[[Datei:Gnome-globe.svg|Lagewunsch|verweis=Kategorie:Wikipedia:Lagewunsch|15px]]';
+	 $icons['fwl'] = 'Wartungsliste';
+	return $icons;
+ }	
+
 ?>
