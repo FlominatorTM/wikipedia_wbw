@@ -17,13 +17,10 @@ $points_per_team = rate_teams($server, $wbw_page);
 
 sort_and_print_score_list($points_per_team);
 
+sort_and_print_template_list($fixedTemplates);
+
 print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints);
 print_form($wbw_page, update_paragraphs(update_summary_paragraph(get_source_code_paragraphs($server, $wbw_page)), $points_per_team), $article);
-
-function print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints)
-{
-	echo "Umfangreichste Überarbeitung: $biggestImprovementArticle mit $biggestImprovementPoints Punkten";
-}
 
 function extract_user_name_column($list_of_article_points)
 {
@@ -136,7 +133,7 @@ function extract_data_for_one_article($list_of_article_points, $i)
 	global $is_debug, $biggestImprovementArticle, $biggestImprovementPoints, $fixedTemplates, $numArticles;
 	$fPoints = 0;
 	$one_rated_article = $list_of_article_points[$i];
-	echo "UU". $one_rated_article ."UU";
+	//echo "UU". $one_rated_article ."UU";
 	if(stristr($one_rated_article, "<td>"))
 	{
 		$one_rated_article = substr($one_rated_article, strpos($one_rated_article, '<td>'));
@@ -160,7 +157,7 @@ function extract_data_for_one_article($list_of_article_points, $i)
 				
 				if($numArticles!=1)
 				{
-					echo "mult=$numArticles";
+					//echo "mult=$numArticles";
 				}
 				$fixedTemplates[$templateName] = $fixedTemplates[$templateName]+$numArticles;
 				$numArticles= 0;
@@ -208,6 +205,30 @@ function sort_and_print_score_list($points_per_team)
 	echo "</ol>";
 }
 
+function sort_and_print_template_list($fixedTemplates)
+{
+	arsort($fixedTemplates, SORT_NUMERIC);
+	echo '<table border="1">';
+	echo "<tr>";
+	foreach(array_keys($fixedTemplates) as $templ)
+	{
+		echo "<th>$templ</th>";
+	}
+	echo "</tr>";
+	echo "<tr>";
+	foreach(array_keys($fixedTemplates) as $templ)
+	{
+		echo '<td style="text-align: center">'.$fixedTemplates[$templ]."</td>";
+	}
+	echo "</tr>";
+	echo "</table>";
+}
+
+function print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints)
+{
+	echo "Umfangreichste Überarbeitung:<br>";
+	echo "$biggestImprovementArticle ($biggestImprovementPoints Punkte)<br><br>";
+}
 
 function get_source_code_paragraphs($server, $wbw_page)
 {
