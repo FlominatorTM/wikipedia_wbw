@@ -17,7 +17,6 @@ $points_per_team = rate_teams($server, $wbw_page);
 
 sort_and_print_score_list($points_per_team);
 
-var_dump($fixedTemplates);
 print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints);
 print_form($wbw_page, update_paragraphs(update_summary_paragraph(get_source_code_paragraphs($server, $wbw_page)), $points_per_team), $article);
 
@@ -124,7 +123,7 @@ function count_points_of_team ($list_of_article_points)
 	$points_of_this_team = 0;
 	//foreach($list_of_article_points as $one_rated_article)
 	$max = count($list_of_article_points);
-	for($i=1;$i<$max;$i++)
+	for($i=0;$i<$max;$i++)
 	{
 		$points_of_this_team+=extract_data_for_one_article($list_of_article_points, $i);
 		
@@ -134,11 +133,16 @@ function count_points_of_team ($list_of_article_points)
 
 function extract_data_for_one_article($list_of_article_points, $i)
 {
-	global $is_debug, $biggestImprovementArticle, $biggestImprovementPoints, $fixedTemplates;
+	global $is_debug, $biggestImprovementArticle, $biggestImprovementPoints, $fixedTemplates, $numArticles;
 	$fPoints = 0;
 	$one_rated_article = $list_of_article_points[$i];
 	echo "UU". $one_rated_article ."UU";
+	if(stristr($one_rated_article, "<td>"))
+	{
+		$one_rated_article = substr($one_rated_article, strpos($one_rated_article, '<td>'));
+	}
 	$indexFirstPipe = strpos($one_rated_article, "|");
+	
 	if($indexFirstPipe > 0)
 	{
 		$indexFirstPipe++;
@@ -154,31 +158,12 @@ function extract_data_for_one_article($list_of_article_points, $i)
 				
 				//echo "points: ". $fPoints;
 				
-				//find articles combined to one templates
-				if(stristr($one_rated_article, "}"))
+				if($numArticles!=1)
 				{
-					$j = $i-1;
-					$goleft = true;
-					$numArticles = 0;
-					do
-					{
-						$titles = explode('title="', $list_of_article_points[$j]);
-						$numArticles += count($titles)-1;
-						$j--;
-						$goleft = strpos('|', $list_of_article_points[$j]) > 0;
-						//these are parts of articles with ( in name
-					}
-					while($goleft);
 					echo "mult=$numArticles";
-					$fixedTemplates[$templateName] +=$numArticles;
-					
-					echo "K-K" . strip_tags($list_of_article_points[$i-1]). "K+K";
 				}
-				else
-				{
-					$fixedTemplates[$templateName] = $fixedTemplates[$templateName]+1;
-				}
-				
+				$fixedTemplates[$templateName] = $fixedTemplates[$templateName]+$numArticles;
+				$numArticles= 0;
 				
 				//get article name
 				$lenOfEnd = 2;
@@ -197,6 +182,10 @@ function extract_data_for_one_article($list_of_article_points, $i)
 		}
 	}
 	//echo "<hr>";
+	
+	$titles = explode('title="', $one_rated_article);
+	$numArticles += count($titles)-1;
+						
 	return $fPoints;
 }
 	
@@ -219,6 +208,7 @@ function sort_and_print_score_list($points_per_team)
 	echo "</ol>";
 }
 
+
 function get_source_code_paragraphs($server, $wbw_page)
 {
 	$wbw_page_raw = $wbw_page. "&action=raw";
@@ -237,25 +227,33 @@ function update_summary_paragraph($paragraphs)
 	$endTableHeadLine = strpos($paragraphs[0], $tableHeadLine) + strlen($tableHeadLine);
 	$endComment =   strpos($paragraphs[0], $commentEnd) + strlen($commentEnd);
 	$endTableHeadLine = max($endTableHeadLine, $endComment);
-	echo "endTableHeadLine: $endTableHeadLine";
+	
 	$tableTemplate = '{{Wikipedia:Wartungsbausteinwettbewerb/Vorlage Tabelle}}';
 	$beginningOfTableTemplate = strpos($paragraphs[0], $tableTemplate, $endTableHeadLine);
-	echo "beginningOfTableTemplate: $beginningOfTableTemplate";
-	$templatesTable = build_templates_table();
+	
+	$templatesTable = build_templates_table_wiki();
 	
 	$paragraphs[0] = substr($paragraphs[0], 0, $endTableHeadLine) . $templatesTable . substr($paragraphs[0], $beginningOfTableTemplate);
 	if($is_debug) echo "<h1>Para 0 after</h1>".htmlspecialchars($paragraphs[0])." <hr>";
 	return $paragraphs;
 }
 
-function build_templates_table()
+function build_templates_table_wiki()
 {
 	global $fixedTemplates;
 	$table = "\n" . '{| class="wikitable" width="100%" ' ."\n" .'|- class="hintergrundfarbe8"';
 	$icons = get_template_icons();
-	foreach(array_keys($fixedTemplates) as $templ)
+	foreach(array_keys($icons) as $templ)
 	{
-		$table.="\n! " . $fixedTemplates[$templ] . ' ' . $icons[$templ];
+		if($fixedTemplates[$templ]>0)
+		{
+			$table.="\n! " . $fixedTemplates[$templ] . ' ' . $icons[$templ];
+		}
+		else
+		{
+			$table.="\n! " . 0 . ' ' . $icons[$templ];
+		}
+		
 	}
 	$table.="\n|}\n";
 	return $table;
