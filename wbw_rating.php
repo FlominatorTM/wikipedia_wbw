@@ -133,8 +133,8 @@ function extract_data_for_one_article($list_of_article_points, $i)
 	global $is_debug, $biggestImprovementArticle, $biggestImprovementPoints, $fixedTemplates, $numArticles;
 	$fPoints = 0;
 	$one_rated_article = $list_of_article_points[$i];
-	//echo "UU". $one_rated_article ."UU";
-	if(stristr($one_rated_article, "<td>"))
+	if ($is_debug) echo "UU". $one_rated_article ."UU";
+	if(stristr($one_rated_article, "<td>")&&$i==0)
 	{
 		$one_rated_article = substr($one_rated_article, strpos($one_rated_article, '<td>'));
 	}
@@ -146,14 +146,14 @@ function extract_data_for_one_article($list_of_article_points, $i)
 		$indexNextPipe = strpos($one_rated_article, "|", $indexFirstPipe);
 		if($indexNextPipe >= 0)
 		{
-			//echo "first:" . $indexFirstPipe . " next: " . $indexNextPipe;
+			if ($is_debug) echo "first:" . $indexFirstPipe . " next: " . $indexNextPipe;
 			$fPoints = substr($one_rated_article, $indexFirstPipe, $indexNextPipe-$indexFirstPipe);
 			
 			if($fPoints>0)
 			{
 				$templateName = substr($one_rated_article,0, $indexFirstPipe-1);
 				
-				//echo "points: ". $fPoints;
+				if ($is_debug) echo "points: ". $fPoints;
 				
 				if($numArticles!=1)
 				{
