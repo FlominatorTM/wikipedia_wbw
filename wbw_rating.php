@@ -7,13 +7,22 @@ include("shared_inc/wiki_functions.inc.php");
 $server = "$lang.$project.org";
 $article = "Wikipedia:Wartungsbausteinwettbewerb/".name_in_url($_REQUEST['edition']);
 $wbw_page = "https://".$server."/w/index.php?title=".$article;
+$biggestImprovementArticle = "";
+$biggestImprovementPoints = 0;
 
 purge($server, $article, $is_debug);
 
 $points_per_team = rate_teams($server, $wbw_page);
 
 sort_and_print_score_list($points_per_team);
+
+print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints);
 print_form($wbw_page, update_paragraphs(get_source_code_paragraphs($server, $wbw_page), $points_per_team), $article);
+
+function print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints)
+{
+	echo "Umfangreichste Überarbeitung: $biggestImprovementArticle mit $biggestImprovementPoints Punkten";
+}
 
 function extract_user_name_column($list_of_article_points)
 {
@@ -111,25 +120,50 @@ function get_number_of_users($allUserNames)
 function count_points_of_team ($list_of_article_points)
 {
 	$points_of_this_team = 0;
-	foreach($list_of_article_points as $one_rated_article)
+	//foreach($list_of_article_points as $one_rated_article)
+	$max = count($list_of_article_points);
+	for($i=1;$i<$max;$i++)
 	{
-		//echo "<hr>";
-		//echo "UU". $one_rated_article ."UU\"</a>";
-		$indexFirstPipe = strpos($one_rated_article, "|");
-		if($indexFirstPipe > 0)
+		$points_of_this_team+=extract_data_for_one_article($list_of_article_points, $i);
+		
+	}
+	return $points_of_this_team;
+}
+
+function extract_data_for_one_article($list_of_article_points, $i)
+{
+	global $is_debug, $biggestImprovementArticle, $biggestImprovementPoints;
+	$fPoints = 0;
+	$one_rated_article = $list_of_article_points[$i];
+	//echo "UU". $one_rated_article ."UU\"</a>";
+	$indexFirstPipe = strpos($one_rated_article, "|");
+	if($indexFirstPipe > 0)
+	{
+		$indexFirstPipe++;
+		$indexNextPipe = strpos($one_rated_article, "|", $indexFirstPipe);
+		if($indexNextPipe >= 0)
 		{
-			$indexFirstPipe++;
-			$indexNextPipe = strpos($one_rated_article, "|", $indexFirstPipe);
-			if($indexNextPipe >= 0)
+			//echo "first:" . $indexFirstPipe . " next: " . $indexNextPipe;
+			$fPoints = substr($one_rated_article, $indexFirstPipe, $indexNextPipe-$indexFirstPipe);
+			//echo "points: ". $fPoints;
+			
+			//get article name
+			$lenOfEnd = 2;
+			$indexBeginningArticleName = strpos($list_of_article_points[$i-1], "\">")+$lenOfEnd;
+			$indexEndArticleName = strpos($list_of_article_points[$i-1], "<", $indexBeginningArticleName+$lenOfEnd);
+			$article = substr($list_of_article_points[$i-1], $indexBeginningArticleName, $indexEndArticleName-$indexBeginningArticleName);
+			//echo "article:" . $article; 
+			
+			if($fPoints>$biggestImprovementPoints)
 			{
-				//echo "first:" . $indexFirstPipe . " next: " . $indexNextPipe;
-				$fPoints = substr($one_rated_article, $indexFirstPipe, $indexNextPipe-$indexFirstPipe);
-				//echo "points: ". $fPoints;
-				$points_of_this_team = $points_of_this_team+$fPoints;
+				//echo "new biggest improvement:".$article . " with $fPoints points";
+				$biggestImprovementPoints = $fPoints;
+				$biggestImprovementArticle = $article;
 			}
 		}
 	}
-	return $points_of_this_team;
+	//echo "<hr>";
+	return $fPoints;
 }
 	
 function sort_and_print_score_list($points_per_team)
