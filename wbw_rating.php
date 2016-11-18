@@ -9,6 +9,7 @@ $article = "Wikipedia:Wartungsbausteinwettbewerb/".name_in_url($_REQUEST['editio
 $wbw_page = "https://".$server."/w/index.php?title=".$article;
 $biggestImprovementArticle = "";
 $biggestImprovementPoints = 0;
+$fixedTemplates;
 
 purge($server, $article, $is_debug);
 
@@ -16,6 +17,7 @@ $points_per_team = rate_teams($server, $wbw_page);
 
 sort_and_print_score_list($points_per_team);
 
+var_dump($fixedTemplates);
 print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints);
 print_form($wbw_page, update_paragraphs(get_source_code_paragraphs($server, $wbw_page), $points_per_team), $article);
 
@@ -132,10 +134,10 @@ function count_points_of_team ($list_of_article_points)
 
 function extract_data_for_one_article($list_of_article_points, $i)
 {
-	global $is_debug, $biggestImprovementArticle, $biggestImprovementPoints;
+	global $is_debug, $biggestImprovementArticle, $biggestImprovementPoints, $fixedTemplates;
 	$fPoints = 0;
 	$one_rated_article = $list_of_article_points[$i];
-	//echo "UU". $one_rated_article ."UU\"</a>";
+	echo "UU". $one_rated_article ."UU\"</a>";
 	$indexFirstPipe = strpos($one_rated_article, "|");
 	if($indexFirstPipe > 0)
 	{
@@ -145,20 +147,26 @@ function extract_data_for_one_article($list_of_article_points, $i)
 		{
 			//echo "first:" . $indexFirstPipe . " next: " . $indexNextPipe;
 			$fPoints = substr($one_rated_article, $indexFirstPipe, $indexNextPipe-$indexFirstPipe);
-			//echo "points: ". $fPoints;
 			
-			//get article name
-			$lenOfEnd = 2;
-			$indexBeginningArticleName = strpos($list_of_article_points[$i-1], "\">")+$lenOfEnd;
-			$indexEndArticleName = strpos($list_of_article_points[$i-1], "<", $indexBeginningArticleName+$lenOfEnd);
-			$article = substr($list_of_article_points[$i-1], $indexBeginningArticleName, $indexEndArticleName-$indexBeginningArticleName);
-			//echo "article:" . $article; 
-			
-			if($fPoints>$biggestImprovementPoints)
+			if($fPoints>0)
 			{
-				//echo "new biggest improvement:".$article . " with $fPoints points";
-				$biggestImprovementPoints = $fPoints;
-				$biggestImprovementArticle = $article;
+				$templateName = substr($one_rated_article,0, $indexFirstPipe-1);
+				$fixedTemplates[$templateName] = $fixedTemplates[$templateName]+1;
+				//echo "points: ". $fPoints;
+				
+				//get article name
+				$lenOfEnd = 2;
+				$indexBeginningArticleName = strpos($list_of_article_points[$i-1], "\">")+$lenOfEnd;
+				$indexEndArticleName = strpos($list_of_article_points[$i-1], "<", $indexBeginningArticleName+$lenOfEnd);
+				$article = substr($list_of_article_points[$i-1], $indexBeginningArticleName, $indexEndArticleName-$indexBeginningArticleName);
+				//echo "article:" . $article; 
+				
+				if($fPoints>$biggestImprovementPoints)
+				{
+					//echo "new biggest improvement:".$article . " with $fPoints points";
+					$biggestImprovementPoints = $fPoints;
+					$biggestImprovementArticle = $article;
+				}
 			}
 		}
 	}
