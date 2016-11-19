@@ -313,7 +313,7 @@ function print_form($wbw_page, $paragraphs, $article)
 	set_up_media_wiki_input_fields("Zwischenstände aktualisiert", "Aktualisieren", $article);
 	
 	if(!$is_debug) $style="style=\"display: none;\"";
-	echo "<textarea name=\"wpTextbox1\" cols=\"80\" rows=\"25\" $style >" . implode($paragraphs, "\n======"). "</textarea><br>";
+	echo "<textarea autocomplete=\"off\" name=\"wpTextbox1\" cols=\"80\" rows=\"25\" $style >" . implode($paragraphs, "\n======"). "</textarea><br>";
 	echo '</form>';
 }
 
