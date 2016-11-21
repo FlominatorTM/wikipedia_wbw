@@ -59,10 +59,10 @@ function rate_teams($server, $wbw_page)
 		if($is_debug) echo "Team=$team_name <br>";
 		$iTeam++; // ignore next part (end of h6-Tag)
 		
+		$columns = explode("</td>", $team_paragraphs[$iTeam]);
 		
-		$list_of_article_points = explode("(", remove_italic_parts($team_paragraphs[$iTeam]));
-		$userNameColumn = extract_user_name_column(&$list_of_article_points); //by ref!!!
-		$numberOfTeamMembers = get_number_of_users($userNameColumn);
+		$list_of_article_points = explode("(", remove_italic_parts($columns[2]));
+		$numberOfTeamMembers = get_number_of_users($columns[0]);
 		
 		$points_of_this_team = count_points_of_team($list_of_article_points);
 
