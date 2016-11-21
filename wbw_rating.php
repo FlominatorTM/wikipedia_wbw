@@ -87,13 +87,13 @@ function remove_italic_parts($team_paragraph)
 	
 	while($indexOfItalicStart > 0)
 	{
-		$indexOfItalicEnd = strpos($team_paragraph, '</i>', $indexOfItalicStart);
+		$indexOfItalicEnd = strpos($team_paragraph, '</i>', $indexOfItalicStart) + strlen('</i>');
 		$team_paragraph = substr($team_paragraph, 0, $indexOfItalicStart) .  substr($team_paragraph,$indexOfItalicEnd);
 		$indexOfItalicStart = strpos($team_paragraph, '<i>', $indexOfItalicEnd );
 	}
 	
-	//echo "ööö" . $team_paragraph . "ööö";
-	return $team_paragraph;
+	//remove remaindings of the template parameter
+	return str_replace('||', '|', $team_paragraph);
 }
 
 function get_number_of_users($allUserNames)
