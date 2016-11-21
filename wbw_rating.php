@@ -101,8 +101,9 @@ function get_number_of_users($allUserNames)
 
 function count_points_of_team ($list_of_article_points)
 {
+	global $nextArticles;
 	$points_of_this_team = 0;
-
+	$nextArticles = "";
 	$max = count($list_of_article_points);
 	for($i=0;$i<$max;$i++)
 	{
@@ -191,7 +192,7 @@ function sort_and_print_score_list($points_per_team)
 	echo "<ol>";
 	for($i=0;$i<count($points_per_team);$i++)
 	{
-		echo "<li>" . $points_per_team[$i]["Team"].":".$points_per_team[$i]["Points"]."</li>";
+		echo "<li>" . $points_per_team[$i]["Team"].": ".$points_per_team[$i]["Points"]."</li>";
 	}
 	echo "</ol>";
 }
