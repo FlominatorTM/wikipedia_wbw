@@ -1,48 +1,34 @@
-<?php header('Content-Type: text/html; charset=utf-8');  ?><h1>Zwischenstände</h1>
+<?php header('Content-Type: text/html; charset=utf-8');  ?>
 <?php 
 
 $is_debug = ($_REQUEST['debug']=="on" || $_REQUEST['debug']=="true" );
 
+$oldid = $_REQUEST['oldid']+0;
 include("shared_inc/wiki_functions.inc.php");
 $server = "$lang.$project.org";
 $article = "Wikipedia:Wartungsbausteinwettbewerb/".name_in_url($_REQUEST['edition']);
-$wbw_page = "https://".$server."/w/index.php?title=".$article;
-$biggestImprovementArticle = "";
-$biggestImprovementPoints = 0;
-$fixedTemplates;
+$wbw_page = "https://".$server."/w/index.php?title=".$article.'&oldid='.$oldid;
 
-purge($server, $article, $is_debug);
-
+echo '<h1>Zwischenstände';
+if($oldid > 0)
+{
+	echo ' aus <a href="'.$wbw_page.'">dieser Version</a> ';
+}
+else
+{
+	purge($server, $article, $is_debug);
+}
+echo '</h1>';
 $points_per_team = rate_teams($server, $wbw_page);
 
 sort_and_print_score_list($points_per_team);
+sort_and_print_biggest_improvements($allImprovements);
+sort_and_print_template_list($fixedTemplates, 'Bausteine');
+sort_and_print_template_list($refereeRatings, 'Schiris');
 
-sort_and_print_template_list($fixedTemplates);
-
-print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints);
-print_form($wbw_page, update_paragraphs(update_summary_paragraph(get_source_code_paragraphs($server, $wbw_page)), $points_per_team), $article);
-
-function extract_user_name_column($list_of_article_points)
+if($oldid==0)
 {
-	global $is_debug;
-	$i = 0;
-	$firstColumn = $list_of_article_points[$i];
-	$list_of_article_points[$i]=""; //remove first column
-	
-	while(!stristr($firstColumn, "</td>"))
-	{
-		if($is_debug) echo "table didn't end in first column, adding next<br>";
-		$i++;
-		if($i==count($list_of_article_points)) 
-		{
-			die("no table end found");
-		}
-		$firstColumn = $firstColumn . $list_of_article_points[$i];
-		$list_of_article_points[$i] = "";
-	}
-	$iEndOfFirstColumn = strpos($firstColumn, "</td>");
-	if($is_debug) echo "end of first column:" . $iEndOfFirstColumn. "<br>";
-	return  substr($firstColumn, 0, $iEndOfFirstColumn);
+	print_form($wbw_page, update_paragraphs(update_summary_paragraph(get_source_code_paragraphs($server, $wbw_page)), $points_per_team), $article);
 }
 
 function rate_teams($server, $wbw_page)
@@ -130,14 +116,20 @@ function count_points_of_team ($list_of_article_points)
 
 function extract_data_for_one_article($list_of_article_points, $i)
 {
-	global $is_debug, $biggestImprovementArticle, $biggestImprovementPoints, $fixedTemplates, $numArticles;
+	global $is_debug, 
+	$fixedTemplates, 
+	$refereeRatings,
+	$nextArticles,
+	$allImprovements;
 	$fPoints = 0;
 	$one_rated_article = $list_of_article_points[$i];
 	if ($is_debug) echo "UU". $one_rated_article ."UU";
-	if(stristr($one_rated_article, "<td>")&&$i==0)
-	{
-		$one_rated_article = substr($one_rated_article, strpos($one_rated_article, '<td>'));
-	}
+	// if($i==0 && stristr($one_rated_article, "</td>"))
+	// {
+		// echo "YYY".htmlspecialchars($one_rated_article)."yyy";
+		// $one_rated_article = substr($one_rated_article, strpos($one_rated_article, '</td>'));
+		// echo "ZZZ".htmlspecialchars($one_rated_article)."zzz";
+	// }
 	$indexFirstPipe = strpos($one_rated_article, "|");
 	
 	if($indexFirstPipe > 0)
@@ -151,43 +143,49 @@ function extract_data_for_one_article($list_of_article_points, $i)
 			
 			if($fPoints>0)
 			{
-				$templateName = substr($one_rated_article,0, $indexFirstPipe-1);
-				
 				if ($is_debug) echo "points: ". $fPoints;
+
+				$templateName = substr($one_rated_article,0, $indexFirstPipe-1);				
+				$referee = substr($one_rated_article, $indexNextPipe+1, 1);
+				$refereeRatings[$referee]++;
 				
-				if($numArticles!=1)
-				{
-					//echo "mult=$numArticles";
-				}
+				$numArticles = count( explode('title="', $nextArticles) )-1;
 				$fixedTemplates[$templateName] = $fixedTemplates[$templateName]+$numArticles;
-				$numArticles= 0;
 				
-				//get article name
-				$lenOfEnd = 2;
-				$indexBeginningArticleName = strpos($list_of_article_points[$i-1], "\">")+$lenOfEnd;
-				$indexEndArticleName = strpos($list_of_article_points[$i-1], "<", $indexBeginningArticleName+$lenOfEnd);
-				$article = substr($list_of_article_points[$i-1], $indexBeginningArticleName, $indexEndArticleName-$indexBeginningArticleName);
-				//echo "article:" . $article; 
+				$article = extract_article_names($nextArticles);
+				$nextArticles = "";
 	
-				if($fPoints>$biggestImprovementPoints)
-				{
-					//echo "new biggest improvement:".$article . " with $fPoints points";
-					$biggestImprovementPoints = $fPoints;
-					$biggestImprovementArticle = $article;
-				}
+				$allImprovements[$article] = $fPoints;
 			}
 		}
 	}
-	//echo "<hr>";
-	
-	$titles = explode('title="', $one_rated_article);
-	$numArticles += count($titles)-1;
-						
+	$nextArticles.='('.$list_of_article_points[$i]; //undo explosion to put together articles
 	return $fPoints;
 }
-	
+
+function extract_article_names($nextArticles)
+{
+	$article = strip_tags($nextArticles);
+	$endOfRating = strpos($article, ')')+1;
+	$article = substr($article, $endOfRating);
+	if(substr($article, 0, 1)=='}')
+	{
+		$article = substr($article, 1);
+	}
+
+	if(substr($article, 0, 1)==',')
+	{
+		$article = substr($article, 1);
+	}
+	if(substr($article, 0, 1)=='{')
+	{
+		$article = substr($article, 1);
+	}
+	return $article;
+}
 function sort_and_print_score_list($points_per_team)
 {
+	echo '<h2>Teams</h2>';
 	foreach ($points_per_team as $nr => $inhalt)
 	{
 		$points[$nr]  = strtolower( $inhalt['Points'] );
@@ -205,8 +203,9 @@ function sort_and_print_score_list($points_per_team)
 	echo "</ol>";
 }
 
-function sort_and_print_template_list($fixedTemplates)
+function sort_and_print_template_list($fixedTemplates, $headline)
 {
+	echo '<h2>'.$headline.'</h2>';
 	arsort($fixedTemplates, SORT_NUMERIC);
 	echo '<table border="1">';
 	echo "<tr>";
@@ -224,10 +223,17 @@ function sort_and_print_template_list($fixedTemplates)
 	echo "</table>";
 }
 
-function print_biggest_improvement($biggestImprovementArticle, $biggestImprovementPoints)
+function sort_and_print_biggest_improvements($allImprovements)
 {
-	echo "Umfangreichste Überarbeitung:<br>";
-	echo "$biggestImprovementArticle ($biggestImprovementPoints Punkte)<br><br>";
+	echo '<h2>Umfangreichste Bearbeitungen</h2>';
+	echo "<ol>";
+	arsort($allImprovements, SORT_NUMERIC);
+	$keys = array_keys($allImprovements);
+	for($i=0;$i<5;$i++)
+	{
+		echo "<li>". $keys[$i] .' ('.$allImprovements[$keys[$i]].")</li>";
+	}
+	echo "</ol>";
 }
 
 function get_source_code_paragraphs($server, $wbw_page)
