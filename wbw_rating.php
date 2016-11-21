@@ -69,8 +69,6 @@ function remove_italic_parts($team_paragraph)
 {
 	$indexOfItalicStart = strpos($team_paragraph, '<i>');
 		
-	//echo "äää" . $team_paragraph . "äää";
-	
 	while($indexOfItalicStart > 0)
 	{
 		$indexOfItalicEnd = strpos($team_paragraph, '</i>', $indexOfItalicStart) + strlen('</i>');
@@ -104,12 +102,11 @@ function get_number_of_users($allUserNames)
 function count_points_of_team ($list_of_article_points)
 {
 	$points_of_this_team = 0;
-	//foreach($list_of_article_points as $one_rated_article)
+
 	$max = count($list_of_article_points);
 	for($i=0;$i<$max;$i++)
 	{
 		$points_of_this_team+=extract_data_for_one_article($list_of_article_points, $i);
-		
 	}
 	return $points_of_this_team;
 }
@@ -124,12 +121,7 @@ function extract_data_for_one_article($list_of_article_points, $i)
 	$fPoints = 0;
 	$one_rated_article = $list_of_article_points[$i];
 	if ($is_debug) echo "UU". $one_rated_article ."UU";
-	// if($i==0 && stristr($one_rated_article, "</td>"))
-	// {
-		// echo "YYY".htmlspecialchars($one_rated_article)."yyy";
-		// $one_rated_article = substr($one_rated_article, strpos($one_rated_article, '</td>'));
-		// echo "ZZZ".htmlspecialchars($one_rated_article)."zzz";
-	// }
+
 	$indexFirstPipe = strpos($one_rated_article, "|");
 	
 	if($indexFirstPipe > 0)
@@ -183,6 +175,7 @@ function extract_article_names($nextArticles)
 	}
 	return $article;
 }
+
 function sort_and_print_score_list($points_per_team)
 {
 	echo '<h2>Teams</h2>';
