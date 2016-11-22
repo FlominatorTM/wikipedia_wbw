@@ -1,8 +1,7 @@
-<?php header('Content-Type: text/html; charset=utf-8');  ?>
-<?php 
+<?php header('Content-Type: text/html; charset=utf-8'); 
 
 $is_debug = ($_REQUEST['debug']=="on" || $_REQUEST['debug']=="true" );
-
+const NUMBER_OF_TOP_IMPROVEMENTS = 10;
 $oldid = $_REQUEST['oldid']+0;
 include("shared_inc/wiki_functions.inc.php");
 $server = "$lang.$project.org";
@@ -223,7 +222,7 @@ function sort_and_print_biggest_improvements($allImprovements)
 	echo "<ol>";
 	arsort($allImprovements, SORT_NUMERIC);
 	$keys = array_keys($allImprovements);
-	for($i=0;$i<5;$i++)
+	for($i=0;$i<NUMBER_OF_TOP_IMPROVEMENTS;$i++)
 	{
 		echo "<li>". $keys[$i] .' ('.$allImprovements[$keys[$i]].")</li>";
 	}
