@@ -72,9 +72,10 @@ function remove_italic_parts($team_paragraph)
 	{
 		$indexOfItalicEnd = strpos($team_paragraph, '</i>', $indexOfItalicStart) + strlen('</i>');
 		$team_paragraph = substr($team_paragraph, 0, $indexOfItalicStart) .  substr($team_paragraph,$indexOfItalicEnd);
-		$indexOfItalicStart = strpos($team_paragraph, '<i>', $indexOfItalicEnd );
+		$indexOfItalicStart = strpos($team_paragraph, '<i>', $indexOfItalicStart); 
+		//do not use end as offset, because it was measured before cutting the part out
+
 	}
-	
 	//remove remaindings of the template parameter
 	return str_replace('||', '|', $team_paragraph);
 }
