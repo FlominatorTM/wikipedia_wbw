@@ -32,7 +32,7 @@ if($oldid==0)
 
 function rate_teams($server, $wbw_page)
 {
-	global $is_debug, $html_page;
+	global $is_debug, $html_page, $allImprovements;
 	$html_page = file_get_contents($wbw_page);
 	$team_paragraphs = explode("h6>", $html_page);
 	$points_per_team;//[] = array("Team"=> "Dummy", "Points"=>"-1");
@@ -49,14 +49,20 @@ function rate_teams($server, $wbw_page)
 		$list_of_article_points = explode("(", remove_italic_parts($columns[2]));
 		$numberOfTeamMembers = get_number_of_users($columns[0]);
 		
+		$improvementsBeforeThisTeam = count($allImprovements);
 		$points_of_this_team = count_points_of_team($list_of_article_points);
+		$improvementsByThisTeam = count($allImprovements) - $improvementsBeforeThisTeam;
 
 		$totalPointsOfThisTeam = $points_of_this_team;
 		if($numberOfTeamMembers>3)
 		{
 			$points_of_this_team = 3* ($points_of_this_team / $numberOfTeamMembers);
 		}
-		$points_per_team[] = array("Team" => $team_name, "Points" => $points_of_this_team, "NumberMembers" => $numberOfTeamMembers, "TotalPoints" => $totalPointsOfThisTeam);
+		$points_per_team[] = array(	"Team" => $team_name, 
+									"Points" => $points_of_this_team, 
+									"NumberMembers" => $numberOfTeamMembers, 
+									"TotalPoints" => $totalPointsOfThisTeam,
+									"ImprovedArticles" => $improvementsByThisTeam);
 		//echo "Team:" . $team_name . "Points:" . $points_of_this_team;
 		//echo $points_per_team[count($points_per_team)-1]["Team"]."//".$points_per_team[count($points_per_team)-1]["Points"];
 		if($is_debug) echo "<hr>";
@@ -179,6 +185,7 @@ function extract_article_names($nextArticles)
 
 function sort_and_print_score_list($points_per_team)
 {
+	$r = 'style="text-align: right;"';
 	echo '<h2>Teams</h2>';
 	foreach ($points_per_team as $nr => $inhalt)
 	{
@@ -189,12 +196,27 @@ function sort_and_print_score_list($points_per_team)
 
 	//print_r (  $points_per_team );
 
-	echo "<ol>";
-	for($i=0;$i<count($points_per_team);$i++)
+	echo '<table border="1">';
+	echo "<tr>";
+	echo "<td>#</td>";
+	echo "<td>Team</td>";
+	echo "<td $r>Punkte</td>";
+	echo "<td $r>Artikel</td>";
+	echo "<td $r>P/A</td>";
+	echo "</tr>";
+	$max = count($points_per_team);
+	for($i=0;$i<$max;$i++)
 	{
-		echo "<li>" . $points_per_team[$i]["Team"].": ".$points_per_team[$i]["Points"]."</li>";
+		$rate = round($points_per_team[$i]["Points"] / $points_per_team[$i]["ImprovedArticles"], 2);
+		echo "<tr>";
+		echo "<td>".($i+1)."</td>";
+		echo "<td>".$points_per_team[$i]["Team"]."</td>";
+		echo "<td $r>".number_format ( $points_per_team[$i]["Points"] , 2 , "," , "" )."</td>";
+		echo "<td $r>".$points_per_team[$i]["ImprovedArticles"]."</td>";
+		echo "<td $r>".number_format ( $rate , 2 , "," , "" )."</td>";
+		echo "</tr>";
 	}
-	echo "</ol>";
+	echo "</table>";
 }
 
 function sort_and_print_template_list($fixedTemplates, $headline)
