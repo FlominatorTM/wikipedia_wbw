@@ -3,6 +3,7 @@
 $is_debug = ($_REQUEST['debug']=="on" || $_REQUEST['debug']=="true" );
 const NUMBER_OF_TOP_IMPROVEMENTS = 10;
 $oldid = $_REQUEST['oldid']+0;
+$unsorted = $_REQUEST['unsorted'];
 include("shared_inc/wiki_functions.inc.php");
 $server = "$lang.$project.org";
 $article = "Wikipedia:Wartungsbausteinwettbewerb/".name_in_url($_REQUEST['edition']);
@@ -20,7 +21,7 @@ else
 echo '</h1>';
 $points_per_team = rate_teams($server, $wbw_page);
 
-sort_and_print_score_list($points_per_team);
+sort_and_print_score_list($points_per_team, "Points", SORT_DESC);
 sort_and_print_biggest_improvements($allImprovements);
 sort_and_print_template_list($fixedTemplates, 'Bausteine');
 sort_and_print_template_list($refereeRatings, 'Schiris');
@@ -183,16 +184,21 @@ function extract_article_names($nextArticles)
 	return $article;
 }
 
-function sort_and_print_score_list($points_per_team)
+function sort_and_print_score_list($points_per_team, $sortKey, $sortOrder)
 {
+	global $unsorted;
 	$r = 'style="text-align: right;"';
 	echo '<h2>Teams</h2>';
 	foreach ($points_per_team as $nr => $inhalt)
 	{
-		$points[$nr]  = strtolower( $inhalt['Points'] );
+		$points[$nr]  = strtolower( $inhalt[$sortKey] );
 	}
+	
 
-	array_multisort($points, SORT_DESC, $points_per_team);
+	if(!$unsorted==true)
+	{
+		array_multisort($points, $sortOrder, $points_per_team);
+	}
 
 	//print_r (  $points_per_team );
 
