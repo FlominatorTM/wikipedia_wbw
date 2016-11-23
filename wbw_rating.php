@@ -6,7 +6,8 @@ $oldid = $_REQUEST['oldid']+0;
 $unsorted = $_REQUEST['unsorted'];
 include("shared_inc/wiki_functions.inc.php");
 $server = "$lang.$project.org";
-$article = "Wikipedia:Wartungsbausteinwettbewerb/".name_in_url($_REQUEST['edition']);
+$edition = name_in_url($_REQUEST['edition']);
+$article = "Wikipedia:Wartungsbausteinwettbewerb/$edition";
 $wbw_page = "https://".$server."/w/index.php?title=".$article.'&oldid='.$oldid;
 
 echo '<h1>Zwischenstände';
@@ -20,8 +21,7 @@ else
 }
 echo '</h1>';
 $points_per_team = rate_teams($server, $wbw_page);
-
-sort_and_print_score_list($points_per_team, "Points", SORT_DESC);
+print_score_list(sort_score_list($points_per_team));
 sort_and_print_biggest_improvements($allImprovements);
 sort_and_print_template_list($fixedTemplates, 'Bausteine');
 sort_and_print_template_list($refereeRatings, 'Schiris');
@@ -187,31 +187,52 @@ function extract_article_names($nextArticles)
 	return $article;
 }
 
-function sort_and_print_score_list($points_per_team, $sortKey, $sortOrder)
+function sort_score_list($points_per_team)
 {
-	global $unsorted;
+	global $sortKeyIndex;
+	$sortKeys[0] = "Points";
+	$sortKeys[1] = "";
+	$sortKeys[2] = "ImprovedArticles";
+	$sortKeys[3] = "Ratio";
+	
+	$sortKeyIndex = $_REQUEST['sortKey']+0;
+	$sortKey = $sortKeys[$sortKeyIndex];
+	
+	if($sortKey != "")
+	{
+		foreach ($points_per_team as $nr => $inhalt)
+		{
+			$points[$nr]  = strtolower( $inhalt[$sortKey] );
+		}
+		array_multisort($points, SORT_DESC, $points_per_team);
+	}
+	return $points_per_team;
+}
+
+function sort_link($thisIndex, $linkText)
+{
+	global $edition, $sortKeyIndex;
+	if($sortKeyIndex != $thisIndex) 
+	{
+		return "<a href=\"?edition=".$edition."&sortKey=".$thisIndex."\">$linkText</a>";
+	}
+	else
+	{
+		return "<b>$linkText</b>";
+	}
+}
+function print_score_list($points_per_team)
+{
 	$r = 'style="text-align: right;"';
 	echo '<h2>Teams</h2>';
-	foreach ($points_per_team as $nr => $inhalt)
-	{
-		$points[$nr]  = strtolower( $inhalt[$sortKey] );
-	}
-	
-
-	if(!$unsorted==true)
-	{
-		array_multisort($points, $sortOrder, $points_per_team);
-	}
-
-	//print_r (  $points_per_team );
 
 	echo '<table border="1">';
 	echo "<tr>";
 	echo "<td>#</td>";
-	echo "<td>Team</td>";
-	echo "<td $r>Punkte</td>";
-	echo "<td $r>Artikel</td>";
-	echo "<td $r>P/A</td>";
+	echo '<td>'. sort_link(1, 'Team') . '</td>';
+	echo '<td>'. sort_link(0, 'Punkte') . '</td>';
+	echo '<td>'. sort_link(2, 'Artikel') . '</td>';
+	echo '<td>'. sort_link(3, 'P/A') . '</td>';
 	echo "</tr>";
 	$max = count($points_per_team);
 	for($i=0;$i<$max;$i++)
