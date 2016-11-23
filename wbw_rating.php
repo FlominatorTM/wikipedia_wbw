@@ -59,11 +59,14 @@ function rate_teams($server, $wbw_page)
 		{
 			$points_of_this_team = 3* ($points_of_this_team / $numberOfTeamMembers);
 		}
+		
+		$ratio = round($totalPointsOfThisTeam / $improvementsByThisTeam, 2);
 		$points_per_team[] = array(	"Team" => $team_name, 
 									"Points" => $points_of_this_team, 
 									"NumberMembers" => $numberOfTeamMembers, 
 									"TotalPoints" => $totalPointsOfThisTeam,
-									"ImprovedArticles" => $improvementsByThisTeam);
+									"ImprovedArticles" => $improvementsByThisTeam,
+									"Ratio" => $ratio);
 		//echo "Team:" . $team_name . "Points:" . $points_of_this_team;
 		//echo $points_per_team[count($points_per_team)-1]["Team"]."//".$points_per_team[count($points_per_team)-1]["Points"];
 		if($is_debug) echo "<hr>";
@@ -213,13 +216,12 @@ function sort_and_print_score_list($points_per_team, $sortKey, $sortOrder)
 	$max = count($points_per_team);
 	for($i=0;$i<$max;$i++)
 	{
-		$rate = round($points_per_team[$i]["Points"] / $points_per_team[$i]["ImprovedArticles"], 2);
 		echo "<tr>";
 		echo "<td>".($i+1)."</td>";
 		echo "<td>".$points_per_team[$i]["Team"]."</td>";
 		echo "<td $r>".number_format ( $points_per_team[$i]["Points"] , 2 , "," , "" )."</td>";
 		echo "<td $r>".$points_per_team[$i]["ImprovedArticles"]."</td>";
-		echo "<td $r>".number_format ( $rate , 2 , "," , "" )."</td>";
+		echo "<td $r>".number_format ($points_per_team[$i]["Ratio"] , 2 , "," , "" )."</td>";
 		echo "</tr>";
 	}
 	echo "</table>";
