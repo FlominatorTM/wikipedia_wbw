@@ -366,14 +366,27 @@ function ask_to_cut_org($oldid, $diff)
 	}
 	else
 	{
+	
 		echo "<form method=\"post\"   enctype=\"multipart/form-data\">
 		Entferne zunächst eventuelle Wartungsbausteine aus dieser mangelhaften Version:<br />
 		
 		<textarea id=\"old_cut\" name=\"old_cut\" cols=\"80\" rows=\"25\">".($src_old)."</textarea><br/>"
 		. "<a href='#' onclick=\"javascript:document.getElementById('new_cut').style['display']='block'\">Hier klicken, um die verbesserte Version zu bearbeiten, um z.B. Nichtteilnehmer-Beiträge zu entfernen&nbsp;</a><br><br>" 
-		."<textarea style=\"display: none;\" id=\"new_cut\" name=\"new_cut\" cols=\"80\" rows=\"25\">".($src_new)."</textarea><br/>
+		."<textarea style=\"display: none;\" id=\"new_cut\" name=\"new_cut\" cols=\"80\" rows=\"25\">".($src_new)."</textarea>";
 		
-		<!-- <input name=\"old_cut\" value=\"".htmlentities($src_old)."\">-->
+		$removedTemplates = find_removed_markers($src_new, scan_for_marker_templates($src_old));
+		echo "Aus dem Artikel entfernte Bausteine:";
+		echo "<ul>";
+		foreach($removedTemplates as $rem )
+		{
+			echo "<li>$rem";
+			echo "&nbsp;<small>". link_to_wikiblame($article, $rem, 5, "alt5?")."</small>";
+			echo "&nbsp;<small>". link_to_wikiblame($article, $rem, 10, "alt10?")."</small>";
+			echo "</li>";
+		}
+
+		echo "</ul>";
+		echo "<!-- <input name=\"old_cut\" value=\"".htmlentities($src_old)."\">-->
 		<input type=\"hidden\" name=\"diff\" value=\"$diff\">
 		<input type=\"hidden\" name=\"article\" value=\"$article\">
 		<input type=\"hidden\" name=\"lang\" value=\"$lang\">
@@ -401,6 +414,81 @@ function ask_to_cut_org($oldid, $diff)
 	}
 }
 
+function link_to_wikiblame($articleenc, $needle, $years, $alias)
+{
+	$day = 6;
+	$mon = 11;
+	$currentYear = 2016;
+	$targetYear = $currentYear - $years;
+	echo '<a href="//wikipedia.ramselehof.de/wikiblame.php?project=wikipedia&article='.$articleenc.'&needle='.$needle."&lang=de&limit=1&offjahr=$targetYear&offmon=$mon&offtag=$day&offhour=23&offmin=59&searchmethod=lin&force_wikitags=on\">$alias</a>";
+}
+function find_removed_markers($src, $templates_in_old)
+{
+	$templatesStillPresent;
+	foreach($templates_in_old as $oneTemplate)
+	{
+		if(!stristr($src, $oneTemplate))
+		{
+			$templatesStillPresent[] = $oneTemplate;
+		}
+		else
+		{
+			echo "$oneTemplate still present";
+			
+		}
+	}
+	return $templatesStillPresent;
+}
+function scan_for_marker_templates($src)
+{
+	$templatesAvailable[] = "überarbeiten";
+	$templatesAvailable[] = "Überarbeiten";
+	$templatesAvailable[] = "Belege fehlen";
+	$templatesAvailable[] = "Quelle";
+	$templatesAvailable[] = "Lückenhaft";
+	$templatesAvailable[] = "Unvollständig";
+	$templatesAvailable[] = "Neutralität";
+	$templatesAvailable[] = "POV";
+	$templatesAvailable[] = "NPOV";
+	$templatesAvailable[] = "Nur Liste";
+	$templatesAvailable[] = "NurListe";
+	$templatesAvailable[] = "Liste";
+	$templatesAvailable[] = "Unverständlich";
+	$templatesAvailable[] = "Veraltet";
+	$templatesAvailable[] = "Zukunft";
+	$templatesAvailable[] = "Widerspruch";
+	$templatesAvailable[] = "Staatslastig";
+	$templatesAvailable[] = "Deutschlandlastig";
+	$templatesAvailable[] = "Schweizlastig";
+	$templatesAvailable[] = "Österreichlastig";
+	$templatesAvailable[] = "QS";
+	$templatesAvailable[] = "Qualitätssicherung";
+	$templatesAvailable[] = "Redundanztext";
+	$templatesAvailable[] = "Meyers";
+	$templatesAvailable[] = "Pierer-1857";
+	$templatesAvailable[] = "Hinweis Brockhaus 1893–1897";
+	$templatesAvailable[] = "Bilderwunsch";
+	$templatesAvailable[] = "Überbildert";
+	$templatesAvailable[] = "Toter Link";
+	$templatesAvailable[] = "Dead link";
+
+	$templatesFound;
+	$partsWithTemplates = explode("{{", $src);
+	
+	foreach($partsWithTemplates as $templateStart)
+	{
+		foreach($templatesAvailable as $templ)
+		{
+			$startCut = substr($templateStart, 0, strlen($templ));
+			if(strtolower($startCut) == strtolower($templ))
+			{
+				$templateEnd = strpos($templateStart, "}");
+				$templatesFound[] = '{{'.substr($templateStart, 0, $templateEnd).'}}';
+			}
+		}
+	}
+	return $templatesFound;
+}
 
 function hex_chars($data) {
     $mb_chars = '';
