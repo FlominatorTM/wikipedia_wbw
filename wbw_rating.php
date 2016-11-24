@@ -22,14 +22,13 @@ else
 echo '</h1>';
 $points_per_team = rate_teams($server, $wbw_page);
 print_score_list(sort_score_list($points_per_team));
-sort_and_print_biggest_improvements($allImprovements);
-sort_and_print_template_list($fixedTemplates, 'Bausteine');
-sort_and_print_template_list($refereeRatings, 'Schiris');
-
 if($oldid==0)
 {
 	print_form($wbw_page, update_paragraphs(update_summary_paragraph(get_source_code_paragraphs($server, $wbw_page)), $points_per_team), $article);
 }
+sort_and_print_biggest_improvements($allImprovements);
+sort_and_print_template_list($fixedTemplates, 'Bausteine');
+sort_and_print_template_list($refereeRatings, 'Schiris');
 
 function rate_teams($server, $wbw_page)
 {
