@@ -420,7 +420,7 @@ function link_to_wikiblame($articleenc, $needle, $years, $alias)
 	$mon = 11;
 	$currentYear = 2016;
 	$targetYear = $currentYear - $years;
-	echo '<a href="//wikipedia.ramselehof.de/wikiblame.php?project=wikipedia&article='.$articleenc.'&needle='.$needle."&lang=de&limit=1&offjahr=$targetYear&offmon=$mon&offtag=$day&offhour=23&offmin=59&searchmethod=lin&force_wikitags=on\">$alias</a>";
+	echo '<a href="//wikipedia.ramselehof.de/wikiblame.php?project=wikipedia&article='.$articleenc.'&needle='.urlencode($needle)."&lang=de&limit=1&offjahr=$targetYear&offmon=$mon&offtag=$day&offhour=23&offmin=59&searchmethod=lin&force_wikitags=on\">$alias</a>";
 }
 function find_removed_markers($src, $templates_in_old)
 {
