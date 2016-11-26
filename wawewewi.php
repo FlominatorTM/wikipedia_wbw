@@ -477,6 +477,7 @@ function scan_for_marker_templates($src)
 	
 	foreach($partsWithTemplates as $templateStart)
 	{
+		$templateStart = ltrim($templateStart);
 		foreach($templatesAvailable as $templ)
 		{
 			$startCut = substr($templateStart, 0, strlen($templ));
