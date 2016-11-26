@@ -410,7 +410,7 @@ function ask_to_cut_org($oldid, $diff)
 function check_bonus_categories($src_old)
 {
 	$bonus_cats[] = 'Wissenschaft';
-	$bonus_cats[] = 'Politik (USA)';
+	$bonus_cats[] = 'Politik (Vereinigte Staaten)';
 	$bonus_cats[] = 'Umwelt und Natur';
 	
 	echo "<h3>Bonus-Kategorien</h3>";
@@ -483,7 +483,6 @@ function show_removed_templates($article, $src_old, $src_new)
 {
 	echo "<h3>Entfernte Bausteine</h3>";
 	$removedTemplates = find_removed_markers($src_new, scan_for_marker_templates($src_old));
-	echo "Aus dem Artikel entfernte Bausteine:";
 	echo "<ul>";
 	foreach($removedTemplates as $rem )
 	{
