@@ -1,5 +1,5 @@
 <?php header('Content-Type: text/html; charset=utf-8'); 
-  
+
 require_once("shared_inc/wiki_functions.inc.php");
 $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbewertung wünschen", "an A-Schiri weitergeben");
 
@@ -371,21 +371,15 @@ function ask_to_cut_org($oldid, $diff)
 		Entferne zunächst eventuelle Wartungsbausteine aus dieser mangelhaften Version:<br />
 		
 		<textarea id=\"old_cut\" name=\"old_cut\" cols=\"80\" rows=\"25\">".($src_old)."</textarea><br/>"
-		. "<a href='#' onclick=\"javascript:document.getElementById('new_cut').style['display']='block'\">Hier klicken, um die verbesserte Version zu bearbeiten, um z.B. Nichtteilnehmer-Beiträge zu entfernen&nbsp;</a><br><br>" 
+		. "<a href='#' onclick=\"javascript:document.getElementById('new_cut').style['display']='block'\">Hier klicken, um die verbesserte Version zu bearbeiten, um z.B. Nichtteilnehmer-Beiträge zu entfernen&nbsp;</a><br>" 
 		."<textarea style=\"display: none;\" id=\"new_cut\" name=\"new_cut\" cols=\"80\" rows=\"25\">".($src_new)."</textarea>";
 		
-		$removedTemplates = find_removed_markers($src_new, scan_for_marker_templates($src_old));
-		echo "Aus dem Artikel entfernte Bausteine:";
-		echo "<ul>";
-		foreach($removedTemplates as $rem )
-		{
-			echo "<li>$rem";
-			echo "&nbsp;<small>". link_to_wikiblame($article, $rem, 5, "alt5?")."</small>";
-			echo "&nbsp;<small>". link_to_wikiblame($article, $rem, 10, "alt10?")."</small>";
-			echo "</li>";
-		}
-
-		echo "</ul>";
+		echo '<table><tr><td valign="top">';
+		check_bonus_categories($src_old);
+		echo '</td><td valign="top">';
+		show_removed_templates($article, $src_old, $src_new);		
+		echo '</td></tr></table>';
+		
 		echo "<!-- <input name=\"old_cut\" value=\"".htmlentities($src_old)."\">-->
 		<input type=\"hidden\" name=\"diff\" value=\"$diff\">
 		<input type=\"hidden\" name=\"article\" value=\"$article\">
@@ -412,6 +406,93 @@ function ask_to_cut_org($oldid, $diff)
 		. "<input name=\"rater\"  id=\"rater\" value=\"$rater\"><br>"
 		."<input type=\"submit\" value=\"Auswerten\"></form>";
 	}
+}
+function check_bonus_categories($src_old)
+{
+	$bonus_cats[] = 'Wissenschaft';
+	$bonus_cats[] = 'Politik (USA)';
+	$bonus_cats[] = 'Umwelt und Natur';
+	
+	echo "<h3>Bonus-Kategorien</h3>";
+	echo "<ul>";
+	$cats = extract_categories($src_old);
+	foreach($cats as $cat_article)
+	{
+		$urlSvg =get_catalyzer_svg_url( $cat_article);
+		if($svg = get_request('tools.wmflabs.org',$urlSvg))
+		{
+			$svg = removeheaders($svg);
+			foreach($bonus_cats as $cat_bonus)
+			{
+				if(stristr($svg, $cat_bonus))
+				{
+					echo "<li>$cat_article => $cat_bonus";
+					echo ' (<a href="' . $urlSvg . '">Grafik</a>)';
+					echo "</li>";
+				}
+			}
+		}
+		else
+		{
+			echo "getting $urlSvg failed";
+		}
+	}
+	echo "</ul>";
+}
+function get_catalyzer_svg_url($cat)
+{
+	$url = 'https://tools.wmflabs.org/erwin85/catanalyzer.php?lang=de&family=wikipedia&submit=Submit&format=svg&cat=' . name_in_url($cat);
+	
+	if(!$res = get_request('tools.wmflabs.org',$url))
+	{
+		echo ("cannot retrieve $url");
+	}
+	$res = removeheaders($res);
+	$linkStart = './tmp/';
+	$linkStartIndex = strpos($res, $linkStart) + strlen($linkStart);
+	$linkEndIndex = strpos($res, '"', $linkStartIndex);
+	$len = $linkEndIndex - $linkStartIndex;
+	$svgPart = substr($res, $linkStartIndex, $len);
+	$urlSvg = 'https://tools.wmflabs.org/erwin85/tmp/' . $svgPart;
+	return $urlSvg;
+}
+
+function extract_categories($src)
+{
+	$cats;
+	$catBeginning = '[[Kategorie:';
+	$startIndex = strpos($src, $catBeginning);
+	while($startIndex >0)
+	{
+		$startIndex+=strlen($catBeginning);
+		$endIndex = strpos($src, ']]', $startIndex);
+		$endIndexPipe =  strpos($src, '|', $startIndex);
+		if($endIndexPipe > -1 && $endIndexPipe < $endIndex)
+		{
+			$endIndex = $endIndexPipe;
+		}
+		$len = $endIndex-$startIndex;
+		$oneCat = substr($src, $startIndex, $len);
+		$cats[] = $oneCat;
+		$startIndex = strpos($src, $catBeginning, $endIndex) ;
+	}
+	return $cats;
+}
+
+function show_removed_templates($article, $src_old, $src_new)
+{
+	echo "<h3>Entfernte Bausteine</h3>";
+	$removedTemplates = find_removed_markers($src_new, scan_for_marker_templates($src_old));
+	echo "Aus dem Artikel entfernte Bausteine:";
+	echo "<ul>";
+	foreach($removedTemplates as $rem )
+	{
+		echo "<li>$rem ";
+		echo " <small>". link_to_wikiblame($article, $rem, 5, "alt5?")."</small>";
+		echo " <small>". link_to_wikiblame($article, $rem, 10, "alt10?")."</small>";
+		echo "</li>";
+	}
+	echo "</ul>";
 }
 
 function link_to_wikiblame($articleenc, $needle, $years, $alias)
