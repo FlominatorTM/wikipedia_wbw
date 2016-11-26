@@ -206,6 +206,8 @@ function get_additional_points()
 	$add+=coord_rating(getint('num_coord'));
 	$add+=dw_rating(getint('num_dw'));
 	$add+=image_rating(getint('num_upload'));
+	$add+= getint('bonus_points');
+	
 	return $add;
 }
 
@@ -395,6 +397,8 @@ function ask_to_cut_org($oldid, $diff)
 		. "<input name=\"num_upload\" id=\"num_upload\"><br>" 
 		. "<label for=\"num_coord\">Anzahl hinzugefügter Koordinaten&nbsp;</label>" 
 		. "<input name=\"num_coord\" id=\"num_coord\"><br>" 
+		. "<label for=\"bonus_points\">Bonuspunkte (z.B. für Kategorien)&nbsp;</label>" 
+		. "<input name=\"bonus_points\" id=\"bonus_points\"><br>" 		
 		. "<label for=\"percent_quality\">Korrekturfaktor (in Prozent)&nbsp;</label>" 
 		. "<input name=\"percent_quality\" id=\"percent_quality\" value=\"100\">" 
 	. "<button name=\"alt5\" id=\"alt5\" type=\"button\" onclick=\"javascript:document.getElementById('percent_quality').value='120';document.getElementById('commentText').value='alt5';\" text=\"alt5\">alt5</button>" 
