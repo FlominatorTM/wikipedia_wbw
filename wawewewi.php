@@ -491,20 +491,31 @@ function show_removed_templates($article, $src_old, $src_new)
 	foreach($removedTemplates as $rem )
 	{
 		echo "<li>$rem ";
-		echo " <small>". link_to_wikiblame($article, $rem, 5, "alt5?")."</small>";
-		echo " <small>". link_to_wikiblame($article, $rem, 10, "alt10?")."</small>";
+		echo " <small>". link_to_wikiblame($article, $rem, 5, "alt5?", false)."</small>";
+		echo " <small>". link_to_wikiblame($article, $rem, 10, "alt10?", false)."</small>";
+		echo " <small>". link_to_wikiblame($article, $rem, 10, "?", true)."</small>";
 		echo "</li>";
 	}
 	echo "</ul>";
 }
 
-function link_to_wikiblame($articleenc, $needle, $years, $alias)
+function link_to_wikiblame($articleenc, $needle, $years, $alias, $binary_search)
 {
 	$day = 6;
 	$mon = 11;
 	$currentYear = 2016;
 	$targetYear = $currentYear - $years;
-	echo '<a href="//wikipedia.ramselehof.de/wikiblame.php?project=wikipedia&article='.$articleenc.'&needle='.urlencode($needle)."&lang=de&limit=1&offjahr=$targetYear&offmon=$mon&offtag=$day&offhour=23&offmin=59&searchmethod=lin&force_wikitags=on\">$alias</a>";
+	echo '<a href="//wikipedia.ramselehof.de/wikiblame.php?project=wikipedia&article='.$articleenc.'&needle='.urlencode($needle).'&lang=de&force_wikitags=on';
+	
+	if($binary_search)
+	{
+		echo '&searchmethod=bin&limit=1000';
+	}
+	else
+	{
+		echo "&limit=1&offjahr=$targetYear&offmon=$mon&offtag=$day&offhour=23&offmin=59&searchmethod=lin";
+	}
+	echo "\">$alias</a>";
 }
 function find_removed_markers($src, $templates_in_old)
 {
