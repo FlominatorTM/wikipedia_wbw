@@ -431,11 +431,6 @@ function find_removed_markers($src, $templates_in_old)
 		{
 			$templatesStillPresent[] = $oneTemplate;
 		}
-		else
-		{
-			echo "$oneTemplate still present";
-			
-		}
 	}
 	return $templatesStillPresent;
 }
