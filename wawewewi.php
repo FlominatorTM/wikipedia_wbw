@@ -86,6 +86,8 @@ $template_shortcuts = array("ü", "q", "lü", "pov", "nl", "uv", "dw", "geo", "a
 $rater = $_REQUEST['rater'];
 $server= $lang.".".$project.".org";
 
+$bonus_cats = $_REQUEST['bonus_cats'];
+
 $oldid = getint('oldid');
 $diff = getint('diff');
 
@@ -336,7 +338,7 @@ function remove_textarea_overhead($text)
 }
 function ask_to_cut_org($oldid, $diff)
 {
-	global $src_old, $article, $diff, $lang, $project, $template_names, $rater, $comment_choices, $server, $forwardText;
+	global $src_old, $article, $diff, $lang, $project, $template_names, $rater, $comment_choices, $server, $forwardText, $bonus_cats;
 	$this_url = "article=$article&oldid=$oldid&diff=$diff&rater=$rater&project=$project&lang=$lang";
 	$src_old = get_source_code($article, $oldid);
 	$src_new = get_source_code($article, $diff);
@@ -357,7 +359,7 @@ function ask_to_cut_org($oldid, $diff)
 		."<textarea style=\"display: none;\" id=\"new_cut\" name=\"new_cut\" cols=\"80\" rows=\"25\">".($src_new)."</textarea>";
 		
 		echo '<table><tr><td valign="top">';
-		check_bonus_categories($src_old);
+		check_bonus_categories($src_old, $bonus_cats);
 		echo '</td><td valign="top">';
 		show_removed_templates($article, $src_old, $src_new);		
 		echo '</td></tr></table>';
@@ -391,12 +393,8 @@ function ask_to_cut_org($oldid, $diff)
 		."<input type=\"submit\" value=\"Auswerten\"></form>";
 	}
 }
-function check_bonus_categories($src_old)
+function check_bonus_categories($src_old, $bonus_cats)
 {
-	$bonus_cats[] = 'Wissenschaft';
-	$bonus_cats[] = 'Politik (Vereinigte Staaten)';
-	$bonus_cats[] = 'Umwelt und Natur';
-	
 	echo "<h3>Bonus-Kategorien</h3>";
 	echo "<ul>";
 	$cats = extract_categories($src_old);
