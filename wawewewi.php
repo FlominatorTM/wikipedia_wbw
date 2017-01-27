@@ -493,7 +493,7 @@ function show_removed_templates($article, $src_old, $src_new)
 		echo "<li>$rem ";
 		echo " <small>". link_to_wikiblame($article, $rem, 5, "alt5?", false)."</small>";
 		echo " <small>". link_to_wikiblame($article, $rem, 10, "alt10?", false)."</small>";
-		echo " <small>". link_to_wikiblame($article, $rem, 10, "?", true)."</small>";
+		echo " <small>". link_to_wikiblame($article, $rem, 10, "wann?", true)."</small>";
 		echo "</li>";
 	}
 	echo "</ul>";
@@ -509,7 +509,7 @@ function link_to_wikiblame($articleenc, $needle, $years, $alias, $binary_search)
 	
 	if($binary_search)
 	{
-		echo '&searchmethod=bin&limit=1000';
+		echo '&searchmethod=bin';
 	}
 	else
 	{
