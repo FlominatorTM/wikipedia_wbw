@@ -249,37 +249,15 @@ function image_rating($num_cases)
 
 function coord_rating($num_cases)
 {
-	$first_improvement = 0.4;
-	$every_other_improvement = 0.15;
-	$points_return = 0.0;
-	switch($num_cases)
-	{
-		case "":
-		case "0":
-		{
-			break;
-		}
-		case "1":
-		{
-			$points_return+=  $first_improvement;
-			break;
-		}
-		default:
-		{
-			$points_return+= $first_improvement;
-			$points_return+= ($every_other_improvement) * ($num_cases-1); 
-			break;
-		}
-	}
-	return $points_return;
+	return get_degressive_rating($num_cases, 0.5, 0.25, 0.025);
 }
 
 function dw_rating($num_cases)
 {
-	$pointsFirstOne = 0.5;
-	$pointsFirstTen = 0.25;
-	$pointsStartingEleven = 0.125;
-	
+	return get_degressive_rating($num_cases, 0.5, 0.25, 0.125);
+}
+function get_degressive_rating($num_cases, $pointsFirstOne, $pointsFirstTen, $pointsStartingEleven)	
+{
 	$points_return = 0.0;
 	
 	if($num_cases == 0)
@@ -300,6 +278,8 @@ function dw_rating($num_cases)
 	}
 	return $points_return;
 }
+
+
 
 function get_similarity($src_old, $src_new)
 {
