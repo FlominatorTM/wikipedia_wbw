@@ -161,7 +161,16 @@ function extract_data_for_one_article($list_of_article_points, $i)
 			}
 		}
 	}
-	$nextArticles.='('.$list_of_article_points[$i]; //undo explosion to put together articles
+
+	//undo explosion to put together articles
+	if($i==0)
+	{
+		$nextArticles.=$list_of_article_points[$i]; 
+	}
+	else
+	{
+		$nextArticles.='('.$list_of_article_points[$i]; 
+	}
 	return $fPoints;
 }
 
@@ -169,7 +178,12 @@ function extract_article_names($nextArticles)
 {
 	$article = strip_tags($nextArticles);
 	$endOfRating = strpos($article, ')')+1;
-	$article = substr($article, $endOfRating);
+	
+	if(strpos($article, '|')>0) //might be the first article of the team
+	{
+		$article = substr($article, $endOfRating);
+	}
+	
 	if(substr($article, 0, 1)=='}')
 	{
 		$article = substr($article, 1);
