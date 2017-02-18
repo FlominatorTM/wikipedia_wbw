@@ -224,10 +224,10 @@ function sort_score_list($points_per_team)
 
 function sort_link($thisIndex, $linkText)
 {
-	global $edition, $sortKeyIndex;
+	global $edition, $sortKeyIndex, $oldid;
 	if($sortKeyIndex != $thisIndex) 
 	{
-		return "<a href=\"?edition=".$edition."&sortKey=".$thisIndex."\">$linkText</a>";
+		return "<a href=\"?edition=".$edition."&sortKey=".$thisIndex."&oldid=".$oldid."\">$linkText</a>";
 	}
 	else
 	{
@@ -424,7 +424,7 @@ function get_place_for_template_insertion($one_paragraph)
 
 function get_result_template($point_set_this_team)
 {
-	global $wbw_page;
+	global $wbw_page, $oldid;
 	$oldid = get_old_id();
 	$anchor = sprintf("%04d",ceil($point_set_this_team["Points"]));
 	$permalink = "[".$wbw_page."&oldid=".$oldid . strftime(" %d.%m.")."]";
