@@ -495,6 +495,7 @@ function str_insert($insertstring, $intostring, $offset)
 	 $icons['alt'] = '[[Datei:QSicon rot Uhr.svg|veraltet|verweis=Kategorie:Wikipedia:veraltet|15px]]';
 	 $icons['dw'] = '[[Datei:Qsicon Weblink red.svg|15x15px|link=Kategorie:Wikipedia:Defekte Weblinks|15px]]';
 	 $icons['geo'] = '[[Datei:Gnome-globe.svg|Lagewunsch|verweis=Kategorie:Wikipedia:Lagewunsch|15px]]';
+	 $icons['bw'] = '[[Datei:Photo-request.svg|30x15px|Bilderwunsch|link=Kategorie:Wikipedia:Bilderwunsch]]';
 	 $icons['fwl'] = 'Wartungsliste';
 	return $icons;
  }	
