@@ -479,9 +479,9 @@ function show_removed_templates($article, $src_old, $src_new)
 
 function link_to_wikiblame($articleenc, $needle, $years, $alias, $binary_search)
 {
-	$day = 6;
-	$mon = 11;
-	$currentYear = 2016;
+	$day = $_REQUEST['start-day'];
+	$mon = $_REQUEST['start-month'];
+	$currentYear = $_REQUEST['start-year'];
 	$targetYear = $currentYear - $years;
 	echo '<a href="//wikipedia.ramselehof.de/wikiblame.php?project=wikipedia&article='.$articleenc.'&needle='.urlencode($needle).'&lang=de&force_wikitags=on';
 	
