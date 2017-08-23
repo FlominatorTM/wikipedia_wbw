@@ -406,7 +406,7 @@ function check_bonus_categories($src_old, $bonus_cats)
 			$svg = removeheaders($svg);
 			foreach($bonus_cats as $cat_bonus)
 			{
-				if(stristr($svg, $cat_bonus))
+				if(stristr($svg, '<title>' . $cat_bonus. '</title>'))
 				{
 					echo "<li>$cat_article => $cat_bonus";
 					echo ' (<a href="' . $urlSvg . '">Grafik</a>)';
