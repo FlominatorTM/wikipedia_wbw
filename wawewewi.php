@@ -291,7 +291,7 @@ function get_similarity($src_old, $src_new)
 
 function compare_old_from_form_with_original($src_old, $oldid, $article)
 {
-	$src_old_reload = removeheaders(get_source_code($article, $oldid));
+	$src_old_reload = get_source_code($article, $oldid);
 	echo "old form: " . strlen($src_old) . "reloaded: " . strlen($src_old_reload);
 
 	$hex_src = hex_chars($src_old);
@@ -401,9 +401,8 @@ function check_bonus_categories($src_old, $bonus_cats)
 	foreach($cats as $cat_article)
 	{
 		$urlSvg =get_catalyzer_svg_url( $cat_article);
-		if($svg = get_request('tools.wmflabs.org',$urlSvg))
+		if($svg = curl_request($urlSvg))
 		{
-			$svg = removeheaders($svg);
 			foreach($bonus_cats as $cat_bonus)
 			{
 				if(stristr($svg, '<title>' . $cat_bonus. '</title>'))
@@ -425,11 +424,11 @@ function get_catalyzer_svg_url($cat)
 {
 	$url = 'https://tools.wmflabs.org/erwin85/catanalyzer.php?lang=de&family=wikipedia&submit=Submit&format=svg&cat=' . name_in_url($cat);
 	
-	if(!$res = get_request('tools.wmflabs.org',$url))
+	if(!$res = curl_request($url))
 	{
-		echo ("cannot retrieve $url");
+        die("cannot retrieve $url");
 	}
-	$res = removeheaders($res);
+	//$res = removeheaders($res);
 	$linkStart = './tmp/';
 	$linkStartIndex = strpos($res, $linkStart) + strlen($linkStart);
 	$linkEndIndex = strpos($res, '"', $linkStartIndex);
