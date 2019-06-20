@@ -359,7 +359,8 @@ function ask_to_cut_org($oldid, $diff)
 		."<textarea style=\"display: none;\" id=\"new_cut\" name=\"new_cut\" cols=\"80\" rows=\"25\">".($src_new)."</textarea>";
 		
 		echo '<table><tr><td valign="top">';
-		check_bonus_categories($src_old, $bonus_cats);
+		// check_bonus_categories($src_old, $bonus_cats);
+        check_bonus_categories_reverse_tree($bonus_cats);
 		echo '</td><td valign="top">';
 		show_removed_templates($article, $src_old, $src_new);		
 		echo '</td></tr></table>';
@@ -393,33 +394,34 @@ function ask_to_cut_org($oldid, $diff)
 		."<input type=\"submit\" value=\"Auswerten\"></form>";
 	}
 }
-function check_bonus_categories($src_old, $bonus_cats)
+function check_bonus_categories_reverse_tree($bonus_cats)
 {
-	echo "<h3>Bonus-Kategorien</h3>";
+    global $articleenc;
+    $urlSvg = "https://tools.wmflabs.org/catscan2/reverse_tree.php?doit=1&language=de&project=wikipedia&namespace=0&title=" . $articleenc;
+
+    echo "<h3>Bonus-<a href=\"" . $urlSvg . "\">Kategorien</a></h3>";
 	echo "<ul>";
 	$cats = extract_categories($src_old);
-	foreach($cats as $cat_article)
-	{
-		$urlSvg =get_catalyzer_svg_url( $cat_article);
-		if($svg = curl_request($urlSvg))
-		{
-			foreach($bonus_cats as $cat_bonus)
-			{
-				if(stristr($svg, '<title>' . $cat_bonus. '</title>'))
-				{
-					echo "<li>$cat_article => $cat_bonus";
-					echo ' (<a href="' . $urlSvg . '">Grafik</a>)';
-					echo "</li>";
-				}
-			}
-		}
-		else
-		{
-			echo "getting $urlSvg failed";
-		}
-	}
+
+    if($svg = curl_request($urlSvg))
+    {
+        foreach($bonus_cats as $cat_bonus)
+        {
+            if(stristr($svg, 'de.wikipedia.org/wiki/Category:' . $cat_bonus."'" ))
+            {
+                echo "<li>$cat_article => $cat_bonus";
+                echo "</li>";
+            }
+        }
+    }
+    else
+    {
+        echo "getting $urlSvg failed";
+    }
+	
 	echo "</ul>";
 }
+
 function get_catalyzer_svg_url($cat)
 {
 	$url = 'https://tools.wmflabs.org/erwin85/catanalyzer.php?lang=de&family=wikipedia&submit=Submit&format=svg&cat=' . name_in_url($cat);
