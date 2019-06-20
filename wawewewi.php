@@ -422,24 +422,6 @@ function check_bonus_categories_reverse_tree($bonus_cats)
 	echo "</ul>";
 }
 
-function get_catalyzer_svg_url($cat)
-{
-	$url = 'https://tools.wmflabs.org/erwin85/catanalyzer.php?lang=de&family=wikipedia&submit=Submit&format=svg&cat=' . name_in_url($cat);
-	
-	if(!$res = curl_request($url))
-	{
-        die("cannot retrieve $url");
-	}
-	//$res = removeheaders($res);
-	$linkStart = './tmp/';
-	$linkStartIndex = strpos($res, $linkStart) + strlen($linkStart);
-	$linkEndIndex = strpos($res, '"', $linkStartIndex);
-	$len = $linkEndIndex - $linkStartIndex;
-	$svgPart = substr($res, $linkStartIndex, $len);
-	$urlSvg = 'https://tools.wmflabs.org/erwin85/tmp/' . $svgPart;
-	return $urlSvg;
-}
-
 function extract_categories($src)
 {
 	$cats;
@@ -610,4 +592,3 @@ function get_source_code($article, $rev)
 ?>
 </body>
 </html>
-
