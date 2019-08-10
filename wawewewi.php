@@ -91,7 +91,7 @@ $bonus_cats = $_REQUEST['bonus_cats'];
 $oldid = getint('oldid');
 $diff = getint('diff');
 
-order_old_and_diff(&$oldid, &$diff);
+order_old_and_diff($oldid, $diff);
 
 $difflink = "https://$lang.$project.org/w/index.php?title=$articleenc&diff=$diff&oldid=$oldid";
 $difflink = "https://$lang.$project.org/w/index.php?title=$articleenc&diff=$diff&oldid=$oldid";
@@ -320,7 +320,7 @@ function compare_old_from_form_with_original($src_old, $oldid, $article)
 	echo "<h1>old reloaded</h1> $hex_src_reload";
 }
 
-function order_old_and_diff($oldid, $diff)
+function order_old_and_diff(&$oldid, &$diff)
 {
 	if($diff<$oldid )
 	{
