@@ -351,7 +351,7 @@ function ask_to_cut_org($oldid, $diff)
 	else
 	{
 	
-		echo "<form method=\"post\"   enctype=\"multipart/form-data\">
+		echo "<form method=\"post\" action=\"wawewewi.php\"  enctype=\"multipart/form-data\">
 		Entferne zunächst eventuelle Wartungsbausteine aus dieser mangelhaften Version:<br />
 		
 		<textarea id=\"old_cut\" name=\"old_cut\" cols=\"80\" rows=\"25\">".($src_old)."</textarea><br/>"
