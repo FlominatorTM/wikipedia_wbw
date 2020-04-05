@@ -8,8 +8,14 @@ $forwardText = "Weitergabe an A-Schiri";
 <html>
  <head>
  <title><?php  echo $article?></title>
+ <style>
+	body {
+		background: #EEE;
+		font-family: Arial;
+	 }
+ </style>
  </head>
- <body style="background:#EEE;font-family:Arial;"><h2>Willkommen beim wirklich wundervollen webbasierten Wartungsbaustein-Wegmach-Wertungs-Wizzard!</h2>
+ <body><h2>Willkommen beim wirklich wundervollen webbasierten Wartungsbaustein-Wegmach-Wertungs-Wizzard!</h2>
 <script>
 function SetComment(selectedComment)
 {
@@ -372,7 +378,7 @@ function ask_to_cut_org($oldid, $diff)
 		<input type=\"hidden\" name=\"project\" value=\"$project\">
 		<input type=\"hidden\" name=\"oldid\" value=\"$oldid\">"
 		. "<label for=\"template\">Wartungsbaustein&nbsp;</label>" .	 array_drop ("template",  $template_names) ."<br>"
-		. "<label for=\"num_sources\">Anzahl verschiedene Belege&nbsp;</label>" 
+		. "<label for=\"num_sources\">Anzahl verschiedener Belege&nbsp;</label>" 
 		. "<input name=\"num_sources\" id=\"num_sources\"><br>" 
 		. "<label for=\"num_dw\">Anzahl reparierter Weblinks&nbsp;</label>" 
 		. "<input name=\"num_dw\" id=\"num_dw\"><br>" 
@@ -380,7 +386,7 @@ function ask_to_cut_org($oldid, $diff)
 		. "<input name=\"num_upload\" id=\"num_upload\"><br>" 
 		. "<label for=\"num_coord\">Anzahl hinzugefügter Koordinaten&nbsp;</label>" 
 		. "<input name=\"num_coord\" id=\"num_coord\"><br>" 
-		. "<label for=\"bonus_points\">Bonuspunkte (z.B. für Kategorien)&nbsp;</label>" 
+		. "<label for=\"bonus_points\">Bonuspunkte (z.&nbsp;B. für Kategorien)&nbsp;</label>" 
 		. "<input name=\"bonus_points\" id=\"bonus_points\"><br>" 		
 		. "<label for=\"percent_quality\">Korrekturfaktor (in Prozent)&nbsp;</label>" 
 		. "<input name=\"percent_quality\" id=\"percent_quality\" value=\"100\">" 
