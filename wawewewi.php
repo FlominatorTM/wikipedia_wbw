@@ -9,7 +9,7 @@ $forwardText = "Weitergabe an A-Schiri";
  <head>
  <title><?php  echo $article?></title>
  </head>
- <body><h2>Willkommen beim wirklich wundervollen webbasierten Wartungsbaustein-Wegmach-Wertungs-Wizzard</h2>
+ <body style="background:#EEE;font-family:Arial;"><h2>Willkommen beim wirklich wundervollen webbasierten Wartungsbaustein-Wegmach-Wertungs-Wizzard!</h2>
 <script>
 function SetComment(selectedComment)
 {
@@ -81,7 +81,7 @@ $src_old_cut = $_REQUEST['old_cut'];
 $src_new_cut = $_REQUEST['new_cut'];
 echo "<!--". strlen($src_old_cut )." -->";;
 
-$template_names = array("Überarbeiten", "Belege fehlen", "Lückenhaft", "Neutralität","NurListe", "Unverständlich", "Defekte Weblinks", "Geographische Lage gewünscht", "Veraltet", "Widerspruch", "Internationalisierung (Deutschlandlastig, Österreichlastig, Schweizlastig)", "(Portal-)Qualitätssicherung", "Redundanz", "Gemeinfreie Quellen (Meyers, Pierer-1857, Brockhaus, ...)", "Bilderwunsch", "Überbildert", "Fachbereichs-Wartungsliste");
+$template_names = array("Überarbeiten", "Belege fehlen", "Lückenhaft", "Neutralität","NurListe", "Unverständlich", "Defekte Weblinks", "Geographische Lage gewünscht", "Veraltet", "Widerspruch", "Internationalisierung (Deutschlandlastig, Österreichlastig, Schweizlastig)", "(Portal-)Qualitätssicherung", "Redundanz", "Gemeinfreie Quellen (Meyers, Pierer-1857, Brockhaus, &hellip;)", "Bilderwunsch", "Überbildert", "Fachbereichs-Wartungsliste");
 $template_shortcuts = array("ü", "q", "lü", "pov", "nl", "uv", "dw", "geo", "alt", "ws", "inter", "qs", "red", "gq", "bw", "übb", "fwl");
 $rater = $_REQUEST['rater'];
 $server= $lang.".".$project.".org";
@@ -193,7 +193,7 @@ else
 echo '[<a href="http://de.wikipedia.org/wiki/Benutzer:Flominator">by Flominator</a>]&nbsp;';
 echo '[<a href="http://de.wikipedia.org/wiki/Benutzer_Diskussion:Flominator/WaWeWeWi.js">Feedback/Hilfe</a>]&nbsp;';
 echo '[<a href="http://de.wikipedia.org/wiki/Wikipedia:Wartungsbausteinwettbewerb">WBW</a>]&nbsp;';
-echo '[<a href="http://de.wikipedia.org/wiki/Wikipedia:WBWA">WBW/A</a>]';
+echo '[<a href="http://de.wikipedia.org/wiki/Wikipedia:WBWA">WBW/A</a>]&nbsp;';
 echo '[<a href="http://de.wikipedia.org/wiki/Wikipedia:Wartungsbausteinwettbewerb/Hinweise_f%C3%BCr_Schiedsrichter">Schiri-Hinweise</a>]';
 
 function getint($field)
@@ -355,7 +355,7 @@ function ask_to_cut_org($oldid, $diff)
 		Entferne zunächst eventuelle Wartungsbausteine aus dieser mangelhaften Version:<br />
 		
 		<textarea id=\"old_cut\" name=\"old_cut\" cols=\"80\" rows=\"25\">".($src_old)."</textarea><br/>"
-		. "<a href='#' onclick=\"javascript:document.getElementById('new_cut').style['display']='block'\">Hier klicken, um die verbesserte Version zu bearbeiten, um z.B. Nichtteilnehmer-Beiträge zu entfernen&nbsp;</a><br>" 
+		. "<a href='#' onclick=\"javascript:document.getElementById('new_cut').style['display']='block'\">Hier klicken, um die verbesserte Version zu bearbeiten, um z.&nbsp;B. Nichtteilnehmer-Beiträge zu entfernen&nbsp;</a><br>" 
 		."<textarea style=\"display: none;\" id=\"new_cut\" name=\"new_cut\" cols=\"80\" rows=\"25\">".($src_new)."</textarea>";
 		
 		echo '<table><tr><td valign="top">';
@@ -496,6 +496,8 @@ function scan_for_marker_templates($src)
 	$templatesAvailable[] = "Überarbeiten";
 	$templatesAvailable[] = "Belege fehlen";
 	$templatesAvailable[] = "Quelle";
+	$templatesAvailable[] = "Quellen";
+	$templatesAvailable[] = "Belege";
 	$templatesAvailable[] = "Lückenhaft";
 	$templatesAvailable[] = "Unvollständig";
 	$templatesAvailable[] = "Neutralität";
