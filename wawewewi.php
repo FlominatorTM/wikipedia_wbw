@@ -4,7 +4,7 @@ require_once("shared_inc/wiki_functions.inc.php");
 $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbewertung wünschen", "an A-Schiri weitergeben");
 
 $forwardText = "Weitergabe an A-Schiri";
-?><!-- checks the similarity of two revisions and helps to rate articles and maintenance template contest, called by http://de.wikipedia.org/wiki/Benutzer:Flominator/WaWeWeWi.js -->
+?><!-- checks the similarity of two revisions and helps to rate articles and maintenance template contest, called by https://de.wikipedia.org/wiki/Benutzer:Flominator/WaWeWeWi.js -->
 <html>
  <head>
  <title><?php  echo $article?></title>
@@ -196,11 +196,11 @@ else
 	
 	echo "<textarea cols=\"150\">{{WBWB|wb=".$template_shortcuts[$template]."|v=$v|n=$len_new|ä=".$similarity."|frei=".$freeSummand."|sr=$rater". $nodiff.$virt.$ql.$anm."}}</textarea><br>";
 }
-echo '[<a href="http://de.wikipedia.org/wiki/Benutzer:Flominator">by Flominator</a>]&nbsp;';
-echo '[<a href="http://de.wikipedia.org/wiki/Benutzer_Diskussion:Flominator/WaWeWeWi.js">Feedback/Hilfe</a>]&nbsp;';
-echo '[<a href="http://de.wikipedia.org/wiki/Wikipedia:Wartungsbausteinwettbewerb">WBW</a>]&nbsp;';
-echo '[<a href="http://de.wikipedia.org/wiki/Wikipedia:WBWA">WBW/A</a>]&nbsp;';
-echo '[<a href="http://de.wikipedia.org/wiki/Wikipedia:Wartungsbausteinwettbewerb/Hinweise_f%C3%BCr_Schiedsrichter">Schiri-Hinweise</a>]';
+echo '[<a href="https://de.wikipedia.org/wiki/Benutzer:Flominator">by Flominator</a>]&nbsp;';
+echo '[<a href="https://de.wikipedia.org/wiki/Benutzer_Diskussion:Flominator/WaWeWeWi.js">Feedback/Hilfe</a>]&nbsp;';
+echo '[<a href="https://de.wikipedia.org/wiki/Wikipedia:Wartungsbausteinwettbewerb">WBW</a>]&nbsp;';
+echo '[<a href="https://de.wikipedia.org/wiki/Wikipedia:WBWA">WBW/A</a>]&nbsp;';
+echo '[<a href="https://de.wikipedia.org/wiki/Wikipedia:Wartungsbausteinwettbewerb/Hinweise_f%C3%BCr_Schiedsrichter">Schiri-Hinweise</a>]';
 
 function getint($field)
 {
