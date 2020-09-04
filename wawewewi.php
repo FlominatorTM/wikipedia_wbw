@@ -422,7 +422,7 @@ function check_bonus_categories_reverse_tree($bonus_cats)
     }
     else
     {
-        echo "getting $urlSvg failed";
+        echo "nicht verfügbar ($cat_bonus)<!-- getting $urlSvg failed -->";
     }
 	
 	echo "</ul>";
