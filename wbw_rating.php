@@ -485,19 +485,19 @@ function str_insert($insertstring, $intostring, $offset)
 	 $icons['lü'] = '[[Datei:Qsicon Lücke.svg|Lückenhaft|verweis=Kategorie:Wikipedia:Lückenhaft|15px]]';
 	 $icons['pov'] = '[[Datei:Qsicon Achtung.svg|Neutralität|verweis=Kategorie:Wikipedia:Neutralität|15px]]';
 	 $icons['nl'] = '[[Datei:QSicon Formatierung.svg|NurListe|verweis=Kategorie:Wikipedia:Nur Liste|15px]]';
-	 $icons['uv'] = '[[Datei:Qsicon Unverstaendlich.svg|15x15px|link=Kategorie:Wikipedia:Unverständlich]]';	 
+	 $icons['uv'] = '[[Datei:Qsicon Unverstaendlich.svg|link=Kategorie:Wikipedia:Unverständlich|15x15px]]';	 
 	 $icons['ws'] = '[[Datei:Split-arrows.svg|Widerspruch|verweis=Kategorie:Wikipedia:Widerspruch|15px]]';
 	 $icons['inter'] = '[[Datei:German-Language-Flag.svg|Internationalisierung|verweis=Kategorie:Wikipedia:Internationalisierung|15px]]';
 	 $icons['qs'] = '[[Datei:Icon tools.svg|Qualitätssicherung|verweis=Kategorie:Wikipedia:Qualitätssicherung|15px]]';
 	 $icons['red'] = '[[Datei:Merge-arrows.svg|Redundanz|verweis=Kategorie:Wikipedia:Redundanz|15px]]';
 	 $icons['gq'] = '[[Datei:Meyerskonvlexikon.jpg|Meyers|verweis=Kategorie:Wikipedia:Meyers|15px]]';
 	 $icons['alt'] = '[[Datei:QSicon rot Uhr.svg|veraltet|verweis=Kategorie:Wikipedia:veraltet|15px]]';
-	 $icons['dw'] = '[[Datei:Qsicon Weblink red.svg|15x15px|link=Kategorie:Wikipedia:Defekte Weblinks|15px]]';
+	 $icons['dw'] = '[[Datei:Qsicon Weblink red.svg|link=Kategorie:Wikipedia:Defekte Weblinks|15px]]';
 	 $icons['geo'] = '[[Datei:Gnome-globe.svg|Lagewunsch|verweis=Kategorie:Wikipedia:Lagewunsch|15px]]';
-	 $icons['bw'] = '[[Datei:Photo-request.svg|30x15px|Bilderwunsch|link=Kategorie:Wikipedia:Bilderwunsch]]';
+	 $icons['bw'] = '[[Datei:Photo-request.svg|Bilderwunsch|link=Kategorie:Wikipedia:Bilderwunsch|30x15px]]';
 	 $icons['fwl'] = 'Wartungsliste';
-	 $icons['v5'] = '[[Datei:Dodecahedron.svg|15x15px|Vielseitigkeitsbonus]]';
-	 $icons['m50'] = '[[Datei:Noto Emoji Oreo 1f41e.svg|18x18px|Mengenbonus]]';
+	 $icons['v5'] = '[[Datei:Dodecahedron.svg|Vielseitigkeitsbonus|15x15px]]';
+	 $icons['m50'] = '[[Datei:Noto Emoji Oreo 1f41e.svg|Mengenbonus|18x18px]]';
 	return $icons;
  }	
 
