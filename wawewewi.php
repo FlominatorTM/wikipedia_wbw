@@ -8,12 +8,7 @@ $forwardText = "Weitergabe an A-Schiri";
 <html>
  <head>
  <title><?php  echo $article?></title>
- <style>
-	body {
-		background: #EEE;
-		font-family: Arial;
-	 }
- </style>
+ <link rel="stylesheet" type="text/css" href="https://wawewewi.toolforge.org/wbwstyles.css">
  </head>
  <body><h2>Willkommen beim wirklich wundervollen webbasierten Wartungsbaustein-Wegmach-Wertungs-Wizzard!</h2>
 <script>
