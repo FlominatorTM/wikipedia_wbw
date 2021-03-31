@@ -595,6 +595,6 @@ function get_source_code($article, $rev)
 	return $article_text;
 }
 ?>
-<p style="text-align:center;><a href="https://admin.toolforge.org/" title="Powered by Toolforge"><img src="https://tools-static.wmflabs.org/toolforge/banners/Powered-by-Toolforge.png" alt="Banner Toolforge"></a></p>
+<p><a href="https://admin.toolforge.org/" title="Powered by Toolforge"><img src="https://tools-static.wmflabs.org/toolforge/banners/Powered-by-Toolforge.png" alt="Banner Toolforge"></a></p>
 </body>
 </html>
