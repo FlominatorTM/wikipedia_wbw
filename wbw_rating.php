@@ -10,6 +10,12 @@ $edition = name_in_url($_REQUEST['edition']);
 $article = "Wikipedia:Wartungsbausteinwettbewerb/$edition";
 $wbw_page = "https://".$server."/w/index.php?title=".$article.'&oldid='.$oldid;
 
+echo '<html>
+ <head>
+ <title>Zwischenstände</title>
+ <link rel="stylesheet" type="text/css" href="https://wawewewi.toolforge.org/wbwstyles.css">
+ </head>
+ <body>'
 echo '<h1>Zwischenstände';
 if($oldid > 0)
 {
@@ -29,6 +35,7 @@ if($oldid==0)
 sort_and_print_biggest_improvements($allImprovements);
 sort_and_print_template_list($fixedTemplates, 'Bausteine');
 sort_and_print_template_list($refereeRatings, 'Schiris');
+echo '</body></html>'
 
 function rate_teams($server, $wbw_page)
 {
