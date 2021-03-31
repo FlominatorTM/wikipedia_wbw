@@ -35,6 +35,7 @@ if($oldid==0)
 sort_and_print_biggest_improvements($allImprovements);
 sort_and_print_template_list($fixedTemplates, 'Bausteine');
 sort_and_print_template_list($refereeRatings, 'Schiris');
+echo '<p><a href="https://admin.toolforge.org/" title="Powered by Toolforge"><img src="https://tools-static.wmflabs.org/toolforge/banners/Powered-by-Toolforge.png" alt="Banner Toolforge"></a></p>';
 echo '</body></html>';
 
 function rate_teams($server, $wbw_page)
