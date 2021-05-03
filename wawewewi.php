@@ -3,7 +3,6 @@
 require_once("shared_inc/wiki_functions.inc.php");
 $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbewertung wünschen");
 
-$forwardText = "Weitergabe an A-Schiri";
 ?><!-- checks the similarity of two revisions and helps to rate articles and maintenance template contest, called by https://de.wikipedia.org/wiki/Benutzer:Flominator/WaWeWeWi.js -->
 <html>
  <head>
