@@ -1,7 +1,7 @@
 <?php header('Content-Type: text/html; charset=utf-8'); 
 
 require_once("shared_inc/wiki_functions.inc.php");
-$comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbewertung wünschen", "an A-Schiri weitergeben");
+$comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbewertung wünschen");
 
 $forwardText = "Weitergabe an A-Schiri";
 ?><!-- checks the similarity of two revisions and helps to rate articles and maintenance template contest, called by https://de.wikipedia.org/wiki/Benutzer:Flominator/WaWeWeWi.js -->
@@ -33,12 +33,6 @@ function SetComment(selectedComment)
 	  { 
 		commentBox.readOnly = true;
 		commentBox.value = "Doppelbewertung erwünscht";
-		break;
-	  }
-	  case "<?php echo $comment_choices[4]?>":
-	  { 
-		commentBox.readOnly = false;
-		commentBox.value = "<?php echo $forwardText ?>";
 		break;
 	  }
 	  default: //"keine"
@@ -347,7 +341,7 @@ function ask_to_cut_org($oldid, $diff)
 	if(max(strlen($src_old), strlen($src_new))>110000 )
 	{
 		echo "<br><br>Mindestens eine der beiden Versionen ist zu lang, um sie per WaWeWeWi auswerten zu lassen. 
-		Bitte <a href=\"?$this_url&old_cut=empty&commentText=$forwardText".urlencode(" - zu lang")."\">gib sie an den A-Schiri weiter</a>.";
+		Bitte kürze die Versionen auf die veränderten Abschnitte zusammen und beantrage weitere Bewertungen durch andere Schiedsrichter.";
 	}
 	else
 	{
