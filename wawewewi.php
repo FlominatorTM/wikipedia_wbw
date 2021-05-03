@@ -462,7 +462,7 @@ function link_to_wikiblame($articleenc, $needle, $years, $alias, $binary_search)
 	$mon = $_REQUEST['start-month'];
 	$currentYear = $_REQUEST['start-year'];
 	$targetYear = $currentYear - $years;
-	echo '<a href="//wikipedia.ramselehof.de/wikiblame.php?project=wikipedia&article='.$articleenc.'&needle='.urlencode($needle).'&lang=de&force_wikitags=on';
+	echo '<a href="//blame.toolforge.org/wikiblame.php?project=wikipedia&article='.$articleenc.'&needle='.urlencode($needle).'&lang=de&force_wikitags=on';
 	
 	if($binary_search)
 	{
