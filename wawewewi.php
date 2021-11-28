@@ -1,19 +1,13 @@
 <?php header('Content-Type: text/html; charset=utf-8'); 
 
 require_once("shared_inc/wiki_functions.inc.php");
-$comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbewertung wünschen", "an A-Schiri weitergeben");
+$comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbewertung wünschen");
 
-$forwardText = "Weitergabe an A-Schiri";
 ?><!-- checks the similarity of two revisions and helps to rate articles and maintenance template contest, called by https://de.wikipedia.org/wiki/Benutzer:Flominator/WaWeWeWi.js -->
 <html>
  <head>
  <title><?php  echo $article?></title>
- <style>
-	body {
-		background: #EEE;
-		font-family: Arial;
-	 }
- </style>
+ <link rel="stylesheet" type="text/css" href="https://wawewewi.toolforge.org/wbwstyles.css">
  </head>
  <body><h2>Willkommen beim wirklich wundervollen webbasierten Wartungsbaustein-Wegmach-Wertungs-Wizzard!</h2>
 <script>
@@ -38,12 +32,6 @@ function SetComment(selectedComment)
 	  { 
 		commentBox.readOnly = true;
 		commentBox.value = "Doppelbewertung erwünscht";
-		break;
-	  }
-	  case "<?php echo $comment_choices[4]?>":
-	  { 
-		commentBox.readOnly = false;
-		commentBox.value = "<?php echo $forwardText ?>";
 		break;
 	  }
 	  default: //"keine"
@@ -352,7 +340,7 @@ function ask_to_cut_org($oldid, $diff)
 	if(max(strlen($src_old), strlen($src_new))>110000 )
 	{
 		echo "<br><br>Mindestens eine der beiden Versionen ist zu lang, um sie per WaWeWeWi auswerten zu lassen. 
-		Bitte <a href=\"?$this_url&old_cut=empty&commentText=$forwardText".urlencode(" - zu lang")."\">gib sie an den A-Schiri weiter</a>.";
+		Bitte kürze die Versionen auf die veränderten Abschnitte zusammen und beantrage weitere Bewertungen durch andere Schiedsrichter.";
 	}
 	else
 	{
@@ -474,7 +462,7 @@ function link_to_wikiblame($articleenc, $needle, $years, $alias, $binary_search)
 	$mon = $_REQUEST['start-month'];
 	$currentYear = $_REQUEST['start-year'];
 	$targetYear = $currentYear - $years;
-	echo '<a href="//wikipedia.ramselehof.de/wikiblame.php?project=wikipedia&article='.$articleenc.'&needle='.urlencode($needle).'&lang=de&force_wikitags=on';
+	echo '<a href="//blame.toolforge.org/wikiblame.php?project=wikipedia&article='.$articleenc.'&needle='.urlencode($needle).'&lang=de&force_wikitags=on';
 	
 	if($binary_search)
 	{
@@ -600,5 +588,6 @@ function get_source_code($article, $rev)
 	return $article_text;
 }
 ?>
+<p><a href="https://admin.toolforge.org/" title="Powered by Toolforge"><img src="https://tools-static.wmflabs.org/toolforge/banners/Powered-by-Toolforge.png" alt="Banner Toolforge"></a></p>
 </body>
 </html>
