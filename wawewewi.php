@@ -245,7 +245,7 @@ function image_rating($num_cases)
 
 function coord_rating($num_cases)
 {
-	return get_degressive_rating($num_cases, 0.5, 0.25, 0.025);
+	return get_degressive_rating($num_cases, 0.5, 0.25, 0.125);
 }
 
 function dw_rating($num_cases)
