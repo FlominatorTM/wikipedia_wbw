@@ -502,6 +502,7 @@ function scan_for_marker_templates($src)
 	$templatesAvailable[] = "Nur Liste";
 	$templatesAvailable[] = "NurListe";
 	$templatesAvailable[] = "Liste";
+	$templatesAvailable[] = "Nur Zitate";
 	$templatesAvailable[] = "Unverständlich";
 	$templatesAvailable[] = "Veraltet";
 	$templatesAvailable[] = "Zukunft";
@@ -514,7 +515,8 @@ function scan_for_marker_templates($src)
 	$templatesAvailable[] = "Qualitätssicherung";
 	$templatesAvailable[] = "Redundanztext";
 	$templatesAvailable[] = "Meyers";
-	$templatesAvailable[] = "Pierer-1857";
+	$templatesAvailable[] = "Hinweis Meyers 1888–1890";
+	$templatesAvailable[] = "Hinweis Pierer 1857–1865";
 	$templatesAvailable[] = "Hinweis Brockhaus 1893–1897";
 	$templatesAvailable[] = "Bilderwunsch";
 	$templatesAvailable[] = "Überbildert";
