@@ -468,6 +468,7 @@ function get_template_icons()
 	$icons['q'] = '[[Datei:Qsicon Quelle.svg|Belege fehlen|verweis=Kategorie:Wikipedia:Belege fehlen|15px]]';
 	$icons['lü'] = '[[Datei:Qsicon Lücke.svg|Lückenhaft|verweis=Kategorie:Wikipedia:Lückenhaft|15px]]';
 	$icons['pov'] = '[[Datei:Qsicon Achtung.svg|Neutralität|verweis=Kategorie:Wikipedia:Neutralität|15px]]';
+	$icons['üb'] = '[[Datei:WP-TranslationProject TwoFlags.svg|rechts|25x25px|verweis=Kategorie:Wikipedia:Übersetzungshinweis]]';
 	$icons['nl'] = '[[Datei:QSicon Formatierung.svg|NurListe|verweis=Kategorie:Wikipedia:Nur Liste|15px]]';
 	$icons['uv'] = '[[Datei:Qsicon Unverstaendlich.svg|Unverständlich|verweis=Kategorie:Wikipedia:Unverständlich|15px]]';
 	$icons['ws'] = '[[Datei:Split-arrows.svg|Widerspruch|verweis=Kategorie:Wikipedia:Widerspruch|15px]]';
