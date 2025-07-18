@@ -1,5 +1,9 @@
 <?php header('Content-Type: text/html; charset=utf-8');
 
+if (isset($_REQUEST['debug'])) {
+	error_reporting(E_ALL);
+	ini_set("display_errors", 1);
+}
 require_once("shared_inc/wiki_functions.inc.php");
 $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbewertung wünschen");
 
@@ -178,7 +182,11 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 
 	function getint($field)
 	{
-		return $_REQUEST[$field] + 1 - 1;
+		if (isset($_REQUEST[$field])) {
+			return intval($_REQUEST[$field]);
+		} else {
+			return 0;
+		}
 	}
 
 	function get_additional_points()
@@ -358,7 +366,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 	}
 	function check_bonus_categories_reverse_tree($bonus_cats)
 	{
-		global $articleenc;
+		global $articleenc, $src_old, $cat_article, $cat_bonus;
 		$urlSvg = "https://tools.wmflabs.org/catscan2/reverse_tree.php?doit=1&language=de&project=wikipedia&namespace=0&title=" . $articleenc;
 
 		echo "<h3>Bonus-<a href=\"" . $urlSvg . "\">Kategorien</a></h3>";
@@ -381,7 +389,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 
 	function extract_categories($src)
 	{
-		$cats;
+		$cats = [];
 		$catBeginning = '[[Kategorie:';
 		$startIndex = strpos($src, $catBeginning);
 		while ($startIndex > 0) {
@@ -432,7 +440,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 	}
 	function find_removed_markers($src, $templates_in_old)
 	{
-		$templatesStillPresent;
+		$templatesStillPresent = [];
 		foreach ($templates_in_old as $oneTemplate) {
 			if (!stristr($src, $oneTemplate)) {
 				$templatesStillPresent[] = $oneTemplate;
@@ -478,7 +486,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 		$templatesAvailable[] = "Toter Link";
 		$templatesAvailable[] = "Dead link";
 
-		$templatesFound;
+		$templatesFound = [];
 		$partsWithTemplates = explode("{{", $src);
 
 		foreach ($partsWithTemplates as $templateStart) {
