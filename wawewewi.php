@@ -147,7 +147,6 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 
 		$comments = $_REQUEST['commentText'];
 		$anm = "";
-		$wasForwarded = stristr($comments, $forwardText);
 
 		$freeSummand = get_additional_points();
 
@@ -156,21 +155,6 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 		echo "Ähnlichkeit ohne Groß- und Kleinschreibung: " . $similarity  . "&nbsp;%\n<br>";
 		echo "Differenz: " . $len_diff . " Bytes<br>";
 		echo "zu erwartende Punktzahl: " . round($expectedPointResult, 2);
-
-		if ($comments != "") {
-			if ($wasForwarded) //a referee should rate this one
-			{
-				$v = "0";
-				$len_new = "0";
-				$similarity = "";
-				$freeSummand = "";
-				$nodiff = "";
-				$virt = "";
-				$ql = "";
-			}
-			$anm = "|anm=" . $comments;
-		}
-
 
 		echo "<textarea cols=\"150\">{{WBWB|wb=" . $template_shortcuts[$template] . "|v=$v|n=$len_new|ä=" . $similarity . "|frei=" . $freeSummand . "|sr=$rater" . $nodiff . $virt . $ql . $anm . "}}</textarea><br>";
 	}
@@ -310,7 +294,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 	}
 	function ask_to_cut_org($oldid, $diff)
 	{
-		global $src_old, $article, $diff, $lang, $project, $template_names, $rater, $comment_choices, $server, $forwardText, $bonus_cats;
+		global $src_old, $article, $diff, $lang, $project, $template_names, $rater, $comment_choices, $server, $bonus_cats;
 		$this_url = "article=$article&oldid=$oldid&diff=$diff&rater=$rater&project=$project&lang=$lang";
 		$src_old = get_source_code($article, $oldid);
 		$src_new = get_source_code($article, $diff);
@@ -336,6 +320,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 
 			echo "<!-- <input name=\"old_cut\" value=\"" . htmlentities($src_old) . "\">-->
 		<input type=\"hidden\" name=\"diff\" value=\"$diff\">
+		<input type=\"hidden\" name=\"debug\" value=\"" . $_REQUEST["debug"] . "\">
 		<input type=\"hidden\" name=\"article\" value=\"$article\">
 		<input type=\"hidden\" name=\"lang\" value=\"$lang\">
 		<input type=\"hidden\" name=\"project\" value=\"$project\">
