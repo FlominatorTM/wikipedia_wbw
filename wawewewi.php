@@ -147,7 +147,9 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 
 		$comments = $_REQUEST['commentText'];
 		$anm = "";
-
+		if ($comments != "") {
+			$anm = "|anm=" . $comments;
+		}
 		$freeSummand = get_additional_points();
 
 		$expectedPointResult = (($changeSummand + $additionSummand + $removalSummand + $freeSummand) / $virtualFactor) * $qualityFactor;
@@ -294,7 +296,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 	}
 	function ask_to_cut_org($oldid, $diff)
 	{
-		global $src_old, $article, $diff, $lang, $project, $template_names, $rater, $comment_choices, $server, $bonus_cats;
+		global $src_old, $article, $diff, $lang, $project, $template_names, $rater, $comment_choices, $server, $bonus_cats, $is_debug;
 		$this_url = "article=$article&oldid=$oldid&diff=$diff&rater=$rater&project=$project&lang=$lang";
 		$src_old = get_source_code($article, $oldid);
 		$src_new = get_source_code($article, $diff);
@@ -318,9 +320,12 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 			show_removed_templates($article, $src_old, $src_new);
 			echo '</td></tr></table>';
 
-			echo "<!-- <input name=\"old_cut\" value=\"" . htmlentities($src_old) . "\">-->
-		<input type=\"hidden\" name=\"diff\" value=\"$diff\">
-		<input type=\"hidden\" name=\"debug\" value=\"" . $_REQUEST["debug"] . "\">
+			// echo "<!-- <input name=\"old_cut\" value=\"" . htmlentities($src_old) . "\">-->
+			if ($is_debug) {
+				echo " <input type=\"hidden\" name=\"debug\" value=\"" . $_REQUEST["debug"] . "\">";
+			}
+
+			echo "<input type=\"hidden\" name=\"diff\" value=\"$diff\">
 		<input type=\"hidden\" name=\"article\" value=\"$article\">
 		<input type=\"hidden\" name=\"lang\" value=\"$lang\">
 		<input type=\"hidden\" name=\"project\" value=\"$project\">
