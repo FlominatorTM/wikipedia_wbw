@@ -1,14 +1,19 @@
 <?php header('Content-Type: text/html; charset=utf-8');
 
 $is_debug = ($_REQUEST['debug'] == "on" || $_REQUEST['debug'] == "true");
+if ($is_debug) {
+	error_reporting(E_ALL);
+	ini_set("display_errors", 1);
+}
 const NUMBER_OF_TOP_IMPROVEMENTS = 10;
-$oldid = $_REQUEST['oldid'] + 0;
+$oldid = $_REQUEST['oldid'];
 $unsorted = $_REQUEST['unsorted'];
 include("shared_inc/wiki_functions.inc.php");
 $server = "$lang.$project.org";
 $edition = name_in_url($_REQUEST['edition']);
 $article = "Wikipedia:Wartungsbausteinwettbewerb/$edition";
 $wbw_page = "https://" . $server . "/w/index.php?title=" . $article . '&oldid=' . $oldid;
+$fixedTemplates = [];
 
 echo '<html>
  <head>
@@ -38,8 +43,9 @@ function rate_teams($server, $wbw_page)
 {
 	global $is_debug, $html_page, $allImprovements;
 	$html_page = file_get_contents($wbw_page);
+
 	$team_paragraphs = explode("<h6", $html_page);
-	$points_per_team; //[] = array("Team"=> "Dummy", "Points"=>"-1");
+	$points_per_team = []; //[] = array("Team"=> "Dummy", "Points"=>"-1");
 
 	for ($iTeam = 1; $iTeam < count($team_paragraphs); $iTeam++) {
 		//team name
@@ -57,7 +63,7 @@ function rate_teams($server, $wbw_page)
 		$list_of_article_points = explode("(", remove_italic_parts($columns[2]));
 		$numberOfTeamMembers = get_number_of_users($columns[0]);
 
-		$improvementsBeforeThisTeam = count($allImprovements);
+		$improvementsBeforeThisTeam = $allImprovements == null ? 0 : count($allImprovements);
 		$points_of_this_team = count_points_of_team($list_of_article_points);
 		$improvementsByThisTeam = count($allImprovements) - $improvementsBeforeThisTeam;
 
@@ -66,7 +72,8 @@ function rate_teams($server, $wbw_page)
 			$points_of_this_team = 3 * ($points_of_this_team / $numberOfTeamMembers);
 		}
 
-		$ratio = round($totalPointsOfThisTeam / $improvementsByThisTeam, 2);
+		$ratio_raw = $improvementsByThisTeam == 0 ? 0 : $totalPointsOfThisTeam / $improvementsByThisTeam;
+		$ratio = round($ratio_raw, 2);
 		$points_per_team[] = array(
 			"Team" => $team_name,
 			"Points" => $points_of_this_team,
@@ -110,7 +117,7 @@ function get_number_of_users($allUserNames)
 			$numberOfTeamMembers++;
 		}
 	}
-	if ($is_debug) echo "Team has " + $numberOfTeamMembers + " members";
+	if ($is_debug) echo "Team has " . $numberOfTeamMembers . " members";
 	return $numberOfTeamMembers;
 }
 
@@ -155,7 +162,6 @@ function extract_data_for_one_article($list_of_article_points, $i)
 
 				$numArticles = count(explode('title="', $nextArticles)) - 1;
 				$fixedTemplates[$templateName] = $fixedTemplates[$templateName] + $numArticles;
-
 				$article = extract_article_names($nextArticles);
 				$nextArticles = "";
 
@@ -170,7 +176,7 @@ function extract_data_for_one_article($list_of_article_points, $i)
 	} else {
 		$nextArticles .= '(' . $list_of_article_points[$i];
 	}
-	return $fPoints;
+	return floatval($fPoints);
 }
 
 function extract_article_names($nextArticles)
@@ -363,11 +369,17 @@ function update_paragraphs($paragraphs, $points_per_team)
 function print_form($wbw_page, $paragraphs, $article)
 {
 	global $is_debug;
+	if ($is_debug) {
+		echo "<h1>Para</h1>";
+		var_dump($paragraphs);
+	}
+	$textarea = implode("\n======", $paragraphs);
+
 	echo '<form method="post" action="' . $wbw_page . '&action=submit">';
 	set_up_media_wiki_input_fields("Zwischenstände aktualisiert", "Aktualisieren", $article);
 
 	if (!$is_debug) $style = "style=\"display: none;\"";
-	echo "<textarea autocomplete=\"off\" name=\"wpTextbox1\" cols=\"80\" rows=\"25\" $style >" . implode($paragraphs, "\n======") . "</textarea><br>";
+	echo "<textarea autocomplete=\"off\" name=\"wpTextbox1\" cols=\"80\" rows=\"25\" $style >" . $textarea . "</textarea><br>";
 	echo '</form>';
 }
 
