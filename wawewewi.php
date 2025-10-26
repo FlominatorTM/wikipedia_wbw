@@ -357,8 +357,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 	function check_bonus_categories_reverse_tree($bonus_cats)
 	{
 		global $articleenc, $src_old, $cat_article, $cat_bonus;
-		$urlSvg = "https://tools.wmflabs.org/catscan2/reverse_tree.php?doit=1&language=de&project=wikipedia&namespace=0&title=" . $articleenc;
-
+		$urlSvg = "https://wikidata-todo.toolforge.org/reverse_tree.php?doit=1&language=de&project=wikipedia&namespace=0&title=" . $articleenc;
 		echo "<h3>Bonus-<a href=\"" . $urlSvg . "\">Kategorien</a></h3>";
 		echo "<ul>";
 		$cats = extract_categories($src_old);
@@ -533,6 +532,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 		$url = "https://" . $server . "/w/index.php?title=" . $articleenc . "&action=raw&oldid=$rev";
 		//echo $url;
 
+		ini_set('user_agent', 'WaWeWeWi by User:Flominator');
 		//echo "<br><br>Suche nach $needle in $article";
 		if (!$article_text = file_get_contents($url)) {
 			//echo "error";
