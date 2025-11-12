@@ -484,6 +484,7 @@ function get_template_icons()
 	$icons['nl'] = '[[Datei:QSicon Formatierung.svg|NurListe|verweis=Kategorie:Wikipedia:Nur Liste|15px]]';
 	$icons['uv'] = '[[Datei:Qsicon Unverstaendlich.svg|Unverständlich|verweis=Kategorie:Wikipedia:Unverständlich|15px]]';
 	$icons['ws'] = '[[Datei:Split-arrows.svg|Widerspruch|verweis=Kategorie:Wikipedia:Widerspruch|15px]]';
+	$icons['ki'] = '[[Datei:AI-generated.svg|rechts|25px|klasse=skin-invert|verweis=Kategorie:Wikipedia:KI-generiert]]';
 	$icons['inter'] = '[[Datei:German-Language-Flag.svg|Internationalisierung|verweis=Kategorie:Wikipedia:Internationalisierung|15px]]';
 	$icons['qs'] = '[[Datei:Icon tools.svg|Qualitätssicherung|verweis=Kategorie:Wikipedia:Qualitätssicherung|15px]]';
 	$icons['red'] = '[[Datei:Merge-arrows.svg|Redundanz|verweis=Kategorie:Wikipedia:Redundanz|15px]]';
@@ -496,5 +497,6 @@ function get_template_icons()
 	$icons['fwl'] = 'Wartungsliste';
 	$icons['v5'] = '[[Datei:Dodecahedron.svg|Vielseitigkeitsbonus|15px]]';
 	$icons['m50'] = '[[Datei:Noto Emoji Oreo 1f41e.svg|Mengenbonus|18px]]';
+
 	return $icons;
 }
