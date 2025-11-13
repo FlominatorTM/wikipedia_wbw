@@ -459,6 +459,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 		$templatesAvailable[] = "Veraltet";
 		$templatesAvailable[] = "Zukunft";
 		$templatesAvailable[] = "Widerspruch";
+		$templatesAvailable[] = "KI-generiert";
 		$templatesAvailable[] = "Staatslastig";
 		$templatesAvailable[] = "Deutschlandlastig";
 		$templatesAvailable[] = "Schweizlastig";
