@@ -301,7 +301,7 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 		$src_old = get_source_code($article, $oldid);
 		$src_new = get_source_code($article, $diff);
 
-		if (max(strlen($src_old), strlen($src_new)) > 110000) {
+		if (false && max(strlen($src_old), strlen($src_new)) > 110000) {
 			echo "<br><br>Mindestens eine der beiden Versionen ist zu lang, um sie per WaWeWeWi auswerten zu lassen. 
 		Bitte kürze die Versionen auf die veränderten Abschnitte zusammen und beantrage weitere Bewertungen durch andere Schiedsrichter.";
 		} else {
