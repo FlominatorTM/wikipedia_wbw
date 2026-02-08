@@ -196,20 +196,20 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 					break;
 				}
 			case "1": {
-					$points_return +=  4;
+					$points_return +=  3;
 					break;
 				}
 			case "2": {
-					$points_return +=  7;
+					$points_return +=  5;
 					break;
 				}
 			case "3": {
-					$points_return +=  9;
+					$points_return +=  6;
 					break;
 				}
 			default: {
-					$points_return += 9;
-					$points_return += ($num_cases - 3);
+					$points_return += 6;
+					$points_return += ($num_cases - 3) * 0.5;
 					break;
 				}
 		}
