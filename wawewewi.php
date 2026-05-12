@@ -345,7 +345,9 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 				. "<input name=\"percent_quality\" id=\"percent_quality\" value=\"100\">"
 				. "<button name=\"alt5\" id=\"alt5\" type=\"button\" onclick=\"javascript:document.getElementById('percent_quality').value='110';document.getElementById('commentText').value='alt5';\" text=\"alt5\">alt5</button>"
 				. "<button name=\"alt10\" id=\"alt10\" type=\"button\" onclick=\"javascript:document.getElementById('percent_quality').value='120';document.getElementById('commentText').value='alt10';\">alt10</button>"
-				. "<button name=\"alt15\" id=\"alt15\" type=\"button\" onclick=\"javascript:document.getElementById('percent_quality').value='130';document.getElementById('commentText').value='alt15';\">alt15</button><br>"
+				. "<button name=\"alt15\" id=\"alt15\" type=\"button\" onclick=\"javascript:document.getElementById('percent_quality').value='130';document.getElementById('commentText').value='alt15';\">alt15</button>"
+				. "<button name=\"alt20\" id=\"alt20\" type=\"button\" onclick=\"javascript:document.getElementById('percent_quality').value='140';document.getElementById('commentText').value='alt20';\">alt20</button>"
+				. "<button name=\"alt25\" id=\"alt25\" type=\"button\" onclick=\"javascript:document.getElementById('percent_quality').value='150';document.getElementById('commentText').value='alt25';\">alt25</button><br>"
 				. 'Tabellensyntax in obigen Textfeldern <a href="#" onclick="javascript:RemoveTableAttributesBoth();"> entfernen</a><br />'
 				. "<label for=\"comment\">Anmerkung&nbsp;</label>" .	 array_drop("comment", $comment_choices, "", "", "SetComment(this.options[this.selectedIndex].text)", $comment_choices[1]) . "<br>"
 				. "<input name=\"commentText\"  id=\"commentText\" size=\"100\"><br>"
@@ -406,6 +408,8 @@ $comment_choices = array("keine", "Text eingeben", "Diskussionsseite", "Doppelbe
 			echo " <small>" . link_to_wikiblame($article, $rem, 5, "alt5?", false) . "</small>";
 			echo " <small>" . link_to_wikiblame($article, $rem, 10, "alt10?", false) . "</small>";
 			echo " <small>" . link_to_wikiblame($article, $rem, 15, "alt15?", false) . "</small>";
+			echo " <small>" . link_to_wikiblame($article, $rem, 20, "alt20?", false) . "</small>";
+			echo " <small>" . link_to_wikiblame($article, $rem, 25, "alt25?", false) . "</small>";
 			echo " <small>" . link_to_wikiblame($article, $rem, 10, "wann?", true) . "</small>";
 			echo "</li>";
 		}
